@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building with AI: A Non-Engineer's Guide to Shipping Real Products</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #FAFAFC;
+  --bg-card: #FFFFFF;
+  --text: #212529;
+  --text-sec: #343A40;
+  --text-muted: #6C757D;
+  --blue: #0B6DEE;
+  --purple: #5A49E1;
+  --green: #46D19A;
+  --border: #DEE2E6;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --grad: linear-gradient(135deg, #5A49E1, #46D19A);
+}
+
+html, body { height: 100%; overflow: hidden; background: #000; font-family: 'Titillium Web', sans-serif; color: var(--text); }
+
+/* Progress bar */
+#progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--grad); z-index: 1000; transition: width 0.4s ease; }
+
+/* Slide container */
+.deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+.slide {
+  position: absolute; top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+
+.slide-inner {
+  width: min(1120px, 90vw);
+  max-height: 85vh;
+  display: flex; flex-direction: column; justify-content: center;
+  overflow-y: auto;
+}
+
+/* Background pattern */
+.slide::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(11,109,238,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 85% 80%, rgba(90,73,225,0.04) 0%, transparent 50%);
+}
+
+/* Typography */
+h1 { font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 2.8rem; line-height: 1.15; color: var(--text); }
+h2 { font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 2rem; line-height: 1.2; color: var(--text); margin-bottom: 0.5em; }
+h3 { font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 1.3rem; color: var(--text); margin-bottom: 0.3em; }
+h4 { font-family: 'Lexend', sans-serif; font-weight: 500; font-size: 1.05rem; color: var(--text-sec); }
+p, li { font-size: 1.15rem; line-height: 1.6; color: var(--text-sec); }
+.subtitle { font-size: 1.3rem; color: var(--text-muted); margin-top: 0.5em; }
+.label { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue); margin-bottom: 0.6em; }
+
+/* Cards */
+.card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.5rem; transition: border-color 0.3s, box-shadow 0.3s;
+}
+.card:hover { border-color: var(--blue); box-shadow: var(--shadow); }
+
+/* Grid helpers */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1.25rem; }
+.flex-col { display: flex; flex-direction: column; gap: 1rem; }
+
+/* Badge */
+.badge {
+  display: inline-block; padding: 0.25em 0.75em; border-radius: 20px;
+  font-size: 0.8rem; font-weight: 600;
+  background: rgba(11,109,238,0.1); color: var(--blue);
+}
+.badge-green { background: rgba(70,209,154,0.15); color: #1a8a5c; }
+.badge-purple { background: rgba(90,73,225,0.12); color: var(--purple); }
+
+/* Category card colors */
+.cat-blue { border-left: 4px solid var(--blue); }
+.cat-green { border-left: 4px solid var(--green); }
+.cat-purple { border-left: 4px solid var(--purple); }
+.cat-teal { border-left: 4px solid #47D6C7; }
+
+/* Spectrum bar */
+.spectrum {
+  height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+  margin: 1rem 0 0.5rem;
+}
+.spectrum-labels { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); }
+
+/* Star marker */
+.star { color: #F5A623; margin-left: 0.25em; }
+
+/* Process step */
+.step-num {
+  width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 1rem; color: #fff; flex-shrink: 0;
+}
+
+/* Tool icon placeholder */
+.tool-icon {
+  width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+
+/* Slide footer */
+.slide-footer {
+  position: absolute; bottom: 1.5rem; left: 0; right: 0;
+  display: flex; justify-content: space-between; padding: 0 5vw;
+  font-size: 0.8rem; color: var(--text-muted);
+}
+.wordmark { font-family: 'Lexend', sans-serif; font-weight: 600; color: var(--blue); }
+
+/* Nav dots */
+#nav {
+  position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 999;
+}
+.dot {
+  width: 10px; height: 10px; border-radius: 50%; border: none; cursor: pointer;
+  background: #ADB5BD; transition: all 0.3s;
+}
+.dot.active { background: var(--blue); box-shadow: 0 0 8px rgba(11,109,238,0.5); }
+.dot:hover { background: var(--blue); }
+
+/* Code block style */
+.code-block {
+  background: #1e1e2e; color: #cdd6f4; border-radius: 10px; padding: 1.25rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.9rem;
+  line-height: 1.7; white-space: pre-wrap; overflow-x: auto;
+}
+.code-block .comment { color: #6c7086; }
+.code-block .user { color: var(--green); }
+.code-block .ai { color: #89b4fa; }
+
+/* Minimal stack */
+.stack-arrow { font-size: 1.5rem; color: var(--blue); display: flex; align-items: center; justify-content: center; }
+
+/* Pitfall card */
+.pitfall { display: flex; gap: 1rem; align-items: flex-start; }
+.pitfall-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .slide-inner { width: 92vw; }
+  p, li { font-size: 1rem; }
+}
+@media (max-width: 480px) {
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.3rem; }
+  .card { padding: 1rem; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .slide { transition: none; }
+  #progress { transition: none; }
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="deck">
+
+<!-- ===================== SLIDE 1: Title ===================== -->
+<div class="slide active" data-title="Title">
+  <div class="slide-inner" style="text-align:center; align-items:center;">
+    <div class="badge" style="margin-bottom:1.5rem;">AI Builder Workshop</div>
+    <h1 style="font-size:3rem; max-width:800px;">Building with AI:<br><span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">A Non-Engineer's Guide</span><br>to Shipping Real Products</h1>
+    <p class="subtitle" style="margin-top:1.5rem; font-size:1.2rem;">Mike Maseda</p>
+    <p style="color:var(--text-muted); font-size:1rem; margin-top:0.3rem;">Head of Sales &amp; Ops, GenHealth &nbsp;|&nbsp; AI Consultant, MAMV Ventures</p>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>1 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 2: Who This Is For ===================== -->
+<div class="slide" data-title="Who This Is For">
+  <div class="slide-inner">
+    <p class="label">The Premise</p>
+    <h2>Who This Talk Is For</h2>
+    <div class="grid-3" style="margin-top:1.5rem;">
+      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
+        <div style="font-size:2.5rem; margin-bottom:0.75rem;">💡</div>
+        <h3>You have ideas</h3>
+        <p style="font-size:1rem; color:var(--text-muted);">Business tools, apps, dashboards — things you wish existed.</p>
+      </div>
+      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
+        <div style="font-size:2.5rem; margin-bottom:0.75rem;">🚫</div>
+        <h3>You're not an engineer</h3>
+        <p style="font-size:1rem; color:var(--text-muted);">You don't write code. You never learned. That's fine.</p>
+      </div>
+      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
+        <div style="font-size:2.5rem; margin-bottom:0.75rem;">🚀</div>
+        <h3>You want to build</h3>
+        <p style="font-size:1rem; color:var(--text-muted);">Not just prototype — actually ship things people use.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem; font-size:1.1rem; color:var(--blue); font-weight:600; text-align:center;">This talk shows you how.</p>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>2 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 3: Credibility ===================== -->
+<div class="slide" data-title="What I've Built">
+  <div class="slide-inner">
+    <p class="label">Context</p>
+    <h2>What I've Built with These Tools</h2>
+    <p style="margin-bottom:1.25rem;">I'm not an engineer. I'm a sales and ops guy. But in the last year, I've shipped:</p>
+    <div class="grid-2">
+      <div class="card cat-blue">
+        <h3>Customer-Facing Products</h3>
+        <p style="font-size:1rem;">Full web apps with auth, databases, payment flows — live in production, serving real users.</p>
+      </div>
+      <div class="card cat-green">
+        <h3>Internal Tools &amp; Dashboards</h3>
+        <p style="font-size:1rem;">Analytics dashboards, CRM integrations, automated reporting — things that would have cost $50K+ to outsource.</p>
+      </div>
+      <div class="card cat-purple">
+        <h3>AI-Powered Workflows</h3>
+        <p style="font-size:1rem;">Voice agents, automated email systems, data processing pipelines — using the same tools I'll show you today.</p>
+      </div>
+      <div class="card cat-teal">
+        <h3>Content &amp; Marketing Sites</h3>
+        <p style="font-size:1rem;">Landing pages, presentation decks, SEO content sites — all built and deployed without writing a line of code from scratch.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>3 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 4: Landscape Section ===================== -->
+<div class="slide" data-title="The Landscape">
+  <div class="slide-inner" style="text-align:center; align-items:center;">
+    <div class="badge-purple badge" style="margin-bottom:1.5rem;">Part 1</div>
+    <h1 style="font-size:2.5rem;">The AI Builder Landscape</h1>
+    <p class="subtitle" style="max-width:600px;">Understanding the categories of tools<br>and when to use each one</p>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>4 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 5: Market Map 1 ===================== -->
+<div class="slide" data-title="AI Builder Landscape">
+  <div class="slide-inner">
+    <p class="label">Market Map</p>
+    <h2>The AI Builder Landscape</h2>
+    <div class="grid-3" style="margin-top:1rem;">
+      <!-- No-Code Builders -->
+      <div class="card cat-green" style="padding:1.25rem;">
+        <div class="badge-green badge" style="margin-bottom:0.75rem;">No-Code Builders</div>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">Visual, drag-drop, prompt-to-app</p>
+        <div class="flex-col" style="gap:0.6rem;">
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#FF6B35;">B</div>
+            <div><h4 style="font-size:0.95rem;">Bolt</h4><p style="font-size:0.8rem;color:var(--text-muted);">Prompt → full app</p></div>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#E91E63;">♥</div>
+            <div><h4 style="font-size:0.95rem;">Lovable</h4><p style="font-size:0.8rem;color:var(--text-muted);">Design-first builder</p></div>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#0D101E;">R</div>
+            <div><h4 style="font-size:0.95rem;">Replit Agent</h4><p style="font-size:0.8rem;color:var(--text-muted);">Chat → deployed app</p></div>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#000;">v0</div>
+            <div><h4 style="font-size:0.95rem;">v0 by Vercel</h4><p style="font-size:0.8rem;color:var(--text-muted);">UI components fast</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coding Agents -->
+      <div class="card cat-blue" style="padding:1.25rem;">
+        <div class="badge" style="margin-bottom:0.75rem;">Coding Agents</div>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">AI writes code, you guide</p>
+        <div class="flex-col" style="gap:0.6rem;">
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#D97706;">C</div>
+            <div><h4 style="font-size:0.95rem;">Claude Code</h4><p style="font-size:0.8rem;color:var(--text-muted);">Terminal-based, powerful</p></div>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#6e40c9;">G</div>
+            <div><h4 style="font-size:0.95rem;">GitHub Copilot</h4><p style="font-size:0.8rem;color:var(--text-muted);">IDE autocomplete + agent</p></div>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#2563EB;">Cu</div>
+            <div><h4 style="font-size:0.95rem;">Cursor</h4><p style="font-size:0.8rem;color:var(--text-muted);">AI-native code editor</p></div>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#059669;">W</div>
+            <div><h4 style="font-size:0.95rem;">Windsurf</h4><p style="font-size:0.8rem;color:var(--text-muted);">AI-first IDE</p></div>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:var(--purple);">O</div>
+            <div><h4 style="font-size:0.95rem;">OpenClaw</h4><p style="font-size:0.8rem;color:var(--text-muted);">Autonomous agent</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- The LLMs -->
+      <div class="card cat-purple" style="padding:1.25rem;">
+        <div class="badge-purple badge" style="margin-bottom:0.75rem;">The LLMs</div>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">The brains behind everything</p>
+        <div class="flex-col" style="gap:0.6rem;">
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#D97706;">C</div>
+            <div><h4 style="font-size:0.95rem;">Claude (Anthropic)</h4><p style="font-size:0.8rem;color:var(--text-muted);">Best for coding & reasoning</p></div>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#10a37f;">G</div>
+            <div><h4 style="font-size:0.95rem;">GPT-4o (OpenAI)</h4><p style="font-size:0.8rem;color:var(--text-muted);">Multimodal powerhouse</p></div>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#4285F4;">G</div>
+            <div><h4 style="font-size:0.95rem;">Gemini (Google)</h4><p style="font-size:0.8rem;color:var(--text-muted);">Large context window</p></div>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:center;">
+            <div class="tool-icon" style="background:#7C3AED;">L</div>
+            <div><h4 style="font-size:0.95rem;">Llama (Meta)</h4><p style="font-size:0.8rem;color:var(--text-muted);">Open source, self-host</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Spectrum -->
+    <div style="margin-top:1.5rem;">
+      <div class="spectrum"></div>
+      <div class="spectrum-labels">
+        <span>← Easier to use</span>
+        <span>More power / flexibility →</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-top:0.25rem; font-size:0.8rem; font-weight:600;">
+        <span style="color:var(--green);">No-Code Builders</span>
+        <span style="color:var(--blue);">Coding Agents</span>
+        <span style="color:var(--purple);">Raw LLMs</span>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>5 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 6: When to Use What ===================== -->
+<div class="slide" data-title="When to Use What">
+  <div class="slide-inner">
+    <p class="label">Decision Framework</p>
+    <h2>When to Use What</h2>
+    <div class="grid-3" style="margin-top:1.5rem;">
+      <div class="card cat-green" style="text-align:center; padding:2rem 1.25rem;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">⚡</div>
+        <h3 style="color:var(--green);">No-Code Builders</h3>
+        <p style="font-size:0.95rem; margin-top:0.75rem;">Quick prototypes</p>
+        <p style="font-size:0.95rem;">Landing pages</p>
+        <p style="font-size:0.95rem;">Simple CRUD apps</p>
+        <p style="font-size:0.95rem;">MVPs & demos</p>
+        <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border);">
+          <p style="font-size:0.85rem; color:var(--text-muted); font-style:italic;">"I need something working in an hour"</p>
+        </div>
+      </div>
+      <div class="card cat-blue" style="text-align:center; padding:2rem 1.25rem;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🏗️</div>
+        <h3 style="color:var(--blue);">Coding Agents</h3>
+        <p style="font-size:0.95rem; margin-top:0.75rem;">Real products</p>
+        <p style="font-size:0.95rem;">Custom business logic</p>
+        <p style="font-size:0.95rem;">Production apps</p>
+        <p style="font-size:0.95rem;">Complex integrations</p>
+        <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border);">
+          <p style="font-size:0.85rem; color:var(--text-muted); font-style:italic;">"I need something that scales and lasts"</p>
+        </div>
+      </div>
+      <div class="card cat-purple" style="text-align:center; padding:2rem 1.25rem;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🧠</div>
+        <h3 style="color:var(--purple);">Raw LLMs</h3>
+        <p style="font-size:0.95rem; margin-top:0.75rem;">Brainstorming</p>
+        <p style="font-size:0.95rem;">Writing specs</p>
+        <p style="font-size:0.95rem;">Content & analysis</p>
+        <p style="font-size:0.95rem;">Strategy & planning</p>
+        <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border);">
+          <p style="font-size:0.85rem; color:var(--text-muted); font-style:italic;">"I need to think through a problem"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>6 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 7: Modern Stack Section ===================== -->
+<div class="slide" data-title="The Modern Stack">
+  <div class="slide-inner" style="text-align:center; align-items:center;">
+    <div class="badge-green badge" style="margin-bottom:1.5rem;">Part 2</div>
+    <h1 style="font-size:2.5rem;">The Modern Stack</h1>
+    <p class="subtitle" style="max-width:600px;">The tools you actually need to go from idea to live product</p>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>7 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 8: Market Map 2 — The Modern Stack ===================== -->
+<div class="slide" data-title="Tool Map">
+  <div class="slide-inner">
+    <p class="label">Market Map</p>
+    <h2>The Modern Stack</h2>
+    <div class="grid-4" style="margin-top:0.75rem;">
+      <div class="card" style="padding:1rem;">
+        <div class="badge" style="margin-bottom:0.5rem; font-size:0.7rem;">Frontend / Deploy</div>
+        <div class="flex-col" style="gap:0.3rem;">
+          <p style="font-size:0.9rem; font-weight:600;">Vercel <span class="star">⭐</span></p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Netlify</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">GitHub Pages</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Cloudflare Pages</p>
+        </div>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div class="badge-green badge" style="margin-bottom:0.5rem; font-size:0.7rem;">Backend / Database</div>
+        <div class="flex-col" style="gap:0.3rem;">
+          <p style="font-size:0.9rem; font-weight:600;">Supabase <span class="star">⭐</span></p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Firebase</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Neon</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">PlanetScale</p>
+        </div>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div class="badge-purple badge" style="margin-bottom:0.5rem; font-size:0.7rem;">Auth</div>
+        <div class="flex-col" style="gap:0.3rem;">
+          <p style="font-size:0.9rem; font-weight:600;">Supabase Auth <span class="star">⭐</span></p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Clerk</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Auth0</p>
+        </div>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div class="badge" style="margin-bottom:0.5rem; font-size:0.7rem;">Version Control</div>
+        <div class="flex-col" style="gap:0.3rem;">
+          <p style="font-size:0.9rem; font-weight:600;">Git / GitHub <span class="star">⭐</span></p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Your save button.</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Undo for everything.</p>
+        </div>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div class="badge-green badge" style="margin-bottom:0.5rem; font-size:0.7rem;">Voice / Audio</div>
+        <div class="flex-col" style="gap:0.3rem;">
+          <p style="font-size:0.9rem; font-weight:600;">ElevenLabs</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">OpenAI Realtime API</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Vapi</p>
+        </div>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div class="badge-purple badge" style="margin-bottom:0.5rem; font-size:0.7rem;">LLM APIs</div>
+        <div class="flex-col" style="gap:0.3rem;">
+          <p style="font-size:0.9rem; font-weight:600;">Anthropic (Claude) <span class="star">⭐</span></p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">OpenAI</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Google (Gemini)</p>
+        </div>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div class="badge" style="margin-bottom:0.5rem; font-size:0.7rem;">Payments</div>
+        <div class="flex-col" style="gap:0.3rem;">
+          <p style="font-size:0.9rem; font-weight:600;">Stripe <span class="star">⭐</span></p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Gumroad</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Lemon Squeezy</p>
+        </div>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div class="badge-green badge" style="margin-bottom:0.5rem; font-size:0.7rem;">Email / Comms</div>
+        <div class="flex-col" style="gap:0.3rem;">
+          <p style="font-size:0.9rem; font-weight:600;">Resend</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">SendGrid</p>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Twilio</p>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:0.75rem; font-size:0.9rem; color:var(--text-muted); text-align:center;"><span class="star">⭐</span> = Mike's personal picks</p>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>8 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 9: Minimal Viable Stack ===================== -->
+<div class="slide" data-title="Minimal Stack">
+  <div class="slide-inner">
+    <p class="label">Keep It Simple</p>
+    <h2>You Don't Need All of These</h2>
+    <p style="margin-bottom:2rem;">The minimal viable stack to build almost anything:</p>
+    <div style="display:flex; align-items:center; justify-content:center; gap:1rem; flex-wrap:wrap;">
+      <div class="card" style="text-align:center; padding:1.5rem 2rem; min-width:140px;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">▲</div>
+        <h3>Vercel</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Deploy</p>
+      </div>
+      <div class="stack-arrow">+</div>
+      <div class="card" style="text-align:center; padding:1.5rem 2rem; min-width:140px;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">⚡</div>
+        <h3>Supabase</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Database + Auth</p>
+      </div>
+      <div class="stack-arrow">+</div>
+      <div class="card" style="text-align:center; padding:1.5rem 2rem; min-width:140px;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🤖</div>
+        <h3>Claude Code</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Build</p>
+      </div>
+      <div class="stack-arrow">+</div>
+      <div class="card" style="text-align:center; padding:1.5rem 2rem; min-width:140px;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🐙</div>
+        <h3>GitHub</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Save &amp; Version</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:2rem; text-align:center; background:rgba(11,109,238,0.04); border-color:var(--blue);">
+      <p style="font-size:1.1rem; font-weight:600; color:var(--blue);">Total cost: $20/mo (Claude Pro) + free tiers for everything else</p>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>9 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 10: Process Section ===================== -->
+<div class="slide" data-title="The Process">
+  <div class="slide-inner" style="text-align:center; align-items:center;">
+    <div class="badge" style="margin-bottom:1.5rem;">Part 3</div>
+    <h1 style="font-size:2.5rem;">The Process</h1>
+    <p class="subtitle" style="max-width:600px;">How I actually build things — from idea to deployed product</p>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>10 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 11: My Process Overview ===================== -->
+<div class="slide" data-title="My Process">
+  <div class="slide-inner">
+    <p class="label">Workflow</p>
+    <h2>My Process</h2>
+    <div class="flex-col" style="gap:1.25rem; margin-top:1.5rem;">
+      <div class="card" style="display:flex; gap:1.25rem; align-items:center;">
+        <div class="step-num" style="background:var(--purple);">1</div>
+        <div>
+          <h3>Conversation with Claude</h3>
+          <p style="font-size:1rem; color:var(--text-muted);">Describe your idea in plain English. Claude helps you turn it into a high-level spec with structure, features, and technical decisions.</p>
+        </div>
+      </div>
+      <div class="card" style="display:flex; gap:1.25rem; align-items:center;">
+        <div class="step-num" style="background:var(--blue);">2</div>
+        <div>
+          <h3>Feed Spec to Claude Code</h3>
+          <p style="font-size:1rem; color:var(--text-muted);">Give it the spec. It asks clarifying questions — "What database? What auth? How should this page look?" — then starts building.</p>
+        </div>
+      </div>
+      <div class="card" style="display:flex; gap:1.25rem; align-items:center;">
+        <div class="step-num" style="background:var(--green);">3</div>
+        <div>
+          <h3>Let It Build</h3>
+          <p style="font-size:1rem; color:var(--text-muted);">It writes the code, creates files, installs dependencies. Usually 80-90% right on the first try.</p>
+        </div>
+      </div>
+      <div class="card" style="display:flex; gap:1.25rem; align-items:center;">
+        <div class="step-num" style="background:#D97706;">4</div>
+        <div>
+          <h3>Refinement</h3>
+          <p style="font-size:1rem; color:var(--text-muted);">Iterate with natural language: "Make the header sticky." "Add dark mode." "Fix the mobile layout." Repeat until done.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>11 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 12: Step 1 — The Spec Conversation ===================== -->
+<div class="slide" data-title="Step 1: The Spec">
+  <div class="slide-inner">
+    <p class="label">Step 1</p>
+    <h2>The Spec Conversation</h2>
+    <div class="grid-2" style="margin-top:1rem;">
+      <div>
+        <h3 style="margin-bottom:0.75rem;">❌ Too vague</h3>
+        <div class="code-block" style="font-size:0.85rem;">
+<span class="user">You:</span> Build me a CRM
+
+<span class="comment">→ Where do you even start?</span></div>
+        <h3 style="margin-top:1.5rem; margin-bottom:0.75rem;">✅ Good spec prompt</h3>
+        <div class="code-block" style="font-size:0.85rem;">
+<span class="user">You:</span> I need a CRM for my
+consulting business. I have about
+50 clients. I want to track:
+- Contact info and company
+- Last interaction date
+- Deal stage (lead → closed)
+- Notes per client
+- Simple dashboard with pipeline view
+
+Tech: Next.js + Supabase.
+Auth: magic link login.
+Just me using it for now.</div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:0.75rem;">What Claude does with it</h3>
+        <div class="code-block" style="font-size:0.85rem;">
+<span class="ai">Claude:</span> Great. Let me clarify:
+
+1. Deal stages — do you want
+   custom stages or fixed?
+2. Dashboard — pipeline view
+   as kanban or table?
+3. Should clients have tags
+   or categories?
+4. Do you need email integration
+   or just manual notes?
+5. Any specific design reference?
+
+<span class="comment">→ Turns your idea into
+   a structured spec</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>12 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 13: Step 2 — Claude Code Takes Over ===================== -->
+<div class="slide" data-title="Step 2: Claude Code">
+  <div class="slide-inner">
+    <p class="label">Step 2</p>
+    <h2>Claude Code Takes Over</h2>
+    <div class="grid-2" style="margin-top:1.25rem;">
+      <div class="flex-col" style="gap:1rem;">
+        <div class="card">
+          <h3>🤝 It's Collaborative, Not Magic</h3>
+          <p style="font-size:0.95rem;">Claude Code reads your spec, asks follow-up questions, then starts generating code file by file.</p>
+        </div>
+        <div class="card">
+          <h3>📁 It Creates Everything</h3>
+          <p style="font-size:0.95rem;">Project structure, database schemas, API routes, UI components, styling — the full stack.</p>
+        </div>
+        <div class="card">
+          <h3>💬 You Stay in the Loop</h3>
+          <p style="font-size:0.95rem;">It explains what it's doing and why. You approve, redirect, or ask questions along the way.</p>
+        </div>
+      </div>
+      <div>
+        <div class="code-block" style="font-size:0.82rem; height:100%;">
+<span class="ai">Claude Code:</span> I'll set up the project:
+
+<span class="comment">Creating files...</span>
+ ✓ package.json
+ ✓ src/app/layout.tsx
+ ✓ src/app/page.tsx
+ ✓ src/app/dashboard/page.tsx
+ ✓ src/lib/supabase.ts
+ ✓ supabase/migrations/001_init.sql
+ ✓ src/components/Pipeline.tsx
+ ✓ src/components/ClientCard.tsx
+
+<span class="comment">Installing dependencies...</span>
+ ✓ next, react, @supabase/supabase-js
+
+<span class="ai">Ready to test.</span> Run `npm run dev`
+to see it locally.
+
+<span class="comment">Want me to add the auth flow next?</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>13 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 14: Step 3 — First Build ===================== -->
+<div class="slide" data-title="Step 3: First Build">
+  <div class="slide-inner">
+    <p class="label">Step 3</p>
+    <h2>First Build — 80-90% Right</h2>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card" style="text-align:center; padding:2rem;">
+        <div style="font-size:3.5rem; font-family:'Lexend',sans-serif; font-weight:700; background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">80-90%</div>
+        <p style="font-size:1.1rem; margin-top:0.5rem;">correct on first try</p>
+        <p style="font-size:0.95rem; color:var(--text-muted); margin-top:0.75rem;">The structure works. The core features work. The design is reasonable.</p>
+      </div>
+      <div class="flex-col" style="gap:1rem;">
+        <h3>What to look for:</h3>
+        <div class="card cat-green" style="padding:1rem;">
+          <p style="font-size:0.95rem;">✅ Core functionality works</p>
+        </div>
+        <div class="card cat-green" style="padding:1rem;">
+          <p style="font-size:0.95rem;">✅ Data flows correctly</p>
+        </div>
+        <div class="card cat-green" style="padding:1rem;">
+          <p style="font-size:0.95rem;">✅ Auth and security basics</p>
+        </div>
+        <div class="card" style="padding:1rem; border-left:4px solid #D97706;">
+          <p style="font-size:0.95rem;">⚠️ Mobile layout may need tweaks</p>
+        </div>
+        <div class="card" style="padding:1rem; border-left:4px solid #D97706;">
+          <p style="font-size:0.95rem;">⚠️ Edge cases not handled yet</p>
+        </div>
+        <div class="card" style="padding:1rem; border-left:4px solid #D97706;">
+          <p style="font-size:0.95rem;">⚠️ Design polish comes in step 4</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>14 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 15: Step 4 — Refinement ===================== -->
+<div class="slide" data-title="Step 4: Refinement">
+  <div class="slide-inner">
+    <p class="label">Step 4</p>
+    <h2>Refinement — The Iteration Loop</h2>
+    <p style="margin-bottom:1.25rem;">This is where the magic happens. Natural language → real changes.</p>
+    <div class="grid-2" style="gap:1.25rem;">
+      <div class="code-block" style="font-size:0.85rem;">
+<span class="user">You:</span> Make the header sticky
+
+<span class="ai">Done.</span> Added position: sticky
+to the header component.
+
+<span class="user">You:</span> Add dark mode toggle
+
+<span class="ai">Done.</span> Added theme context,
+toggle button, and dark CSS vars.
+
+<span class="user">You:</span> The table is too wide
+on mobile. Make it scroll
+horizontally.
+
+<span class="ai">Done.</span> Wrapped in overflow-x
+container with snap points.
+
+<span class="user">You:</span> Add a CSV export button
+to the dashboard
+
+<span class="ai">Done.</span> Added export function
+with date-stamped filename.</div>
+      <div class="flex-col" style="gap:1rem;">
+        <div class="card" style="background:rgba(70,209,154,0.05); border-color:var(--green);">
+          <h3 style="color:var(--green);">The key insight</h3>
+          <p style="font-size:1rem;">You don't need to know <em>how</em> to implement something. You just need to describe <em>what</em> you want.</p>
+        </div>
+        <div class="card">
+          <h3>Common refinements:</h3>
+          <ul style="list-style:none; padding:0;">
+            <li style="font-size:0.95rem; padding:0.3rem 0;">→ "Make it look like [reference]"</li>
+            <li style="font-size:0.95rem; padding:0.3rem 0;">→ "Add loading states"</li>
+            <li style="font-size:0.95rem; padding:0.3rem 0;">→ "Handle empty states"</li>
+            <li style="font-size:0.95rem; padding:0.3rem 0;">→ "Add search/filter"</li>
+            <li style="font-size:0.95rem; padding:0.3rem 0;">→ "Fix the spacing on mobile"</li>
+            <li style="font-size:0.95rem; padding:0.3rem 0;">→ "Add email notifications"</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>15 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 16: Common Pitfalls ===================== -->
+<div class="slide" data-title="Common Pitfalls">
+  <div class="slide-inner">
+    <p class="label">Watch Out</p>
+    <h2>Common Pitfalls</h2>
+    <div class="grid-2" style="margin-top:1.5rem; gap:1.5rem;">
+      <div class="card" style="padding:1.5rem;">
+        <div class="pitfall">
+          <div class="pitfall-icon">🌫️</div>
+          <div>
+            <h3>Being too vague in specs</h3>
+            <p style="font-size:0.95rem; color:var(--text-muted);">"Build me an app" → garbage. Be specific about features, data, and user flows. The more context you give, the better the output.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <div class="pitfall">
+          <div class="pitfall-icon">💾</div>
+          <div>
+            <h3>Not using version control</h3>
+            <p style="font-size:0.95rem; color:var(--text-muted);">Without Git, one bad change can destroy hours of work. Commit early, commit often. It's your undo button.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <div class="pitfall">
+          <div class="pitfall-icon">🏔️</div>
+          <div>
+            <h3>Trying to build too much at once</h3>
+            <p style="font-size:0.95rem; color:var(--text-muted);">Start with the core feature. Get it working. Then add the next thing. Scope creep kills projects.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <div class="pitfall">
+          <div class="pitfall-icon">📱</div>
+          <div>
+            <h3>Not testing on mobile</h3>
+            <p style="font-size:0.95rem; color:var(--text-muted);">60%+ of your users are on phones. Test early. AI-generated layouts often need mobile refinement.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>16 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 17: What You Can Build Section ===================== -->
+<div class="slide" data-title="What You Can Build">
+  <div class="slide-inner" style="text-align:center; align-items:center;">
+    <div class="badge-purple badge" style="margin-bottom:1.5rem;">Part 4</div>
+    <h1 style="font-size:2.5rem;">What You Can Build</h1>
+    <p class="subtitle" style="max-width:600px;">Real examples of what non-engineers are shipping today</p>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>17 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 18: Real Examples ===================== -->
+<div class="slide" data-title="Real Examples">
+  <div class="slide-inner">
+    <p class="label">What's Possible</p>
+    <h2>Real Things Non-Engineers Are Building</h2>
+    <div class="grid-3" style="margin-top:1.25rem;">
+      <div class="card" style="text-align:center; padding:1.5rem;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">📊</div>
+        <h3>Internal Dashboards</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted);">KPI trackers, sales dashboards, reporting tools — things you'd normally ask engineering to build.</p>
+      </div>
+      <div class="card" style="text-align:center; padding:1.5rem;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">👥</div>
+        <h3>Customer-Facing Apps</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted);">Client portals, booking systems, self-service tools — with auth, payments, and real data.</p>
+      </div>
+      <div class="card" style="text-align:center; padding:1.5rem;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">⚙️</div>
+        <h3>Automations</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted);">Email workflows, data processing, CRM integrations — things that used to require Zapier + duct tape.</p>
+      </div>
+      <div class="card" style="text-align:center; padding:1.5rem;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🌐</div>
+        <h3>Content Sites</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted);">Landing pages, blogs, marketing sites — deployed in minutes, not weeks.</p>
+      </div>
+      <div class="card" style="text-align:center; padding:1.5rem;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">📈</div>
+        <h3>Data Analysis Tools</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted);">Upload a CSV, get insights. Custom analytics without learning Python.</p>
+      </div>
+      <div class="card" style="text-align:center; padding:1.5rem;">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">🎙️</div>
+        <h3>AI-Powered Products</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted);">Voice agents, chatbots, content generators — products that weren't possible 18 months ago.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>18 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 19: The 80/20 ===================== -->
+<div class="slide" data-title="The 80/20">
+  <div class="slide-inner" style="text-align:center; align-items:center;">
+    <h2 style="font-size:1.5rem; color:var(--text-muted); font-weight:400; margin-bottom:1rem;">The 80/20 Rule</h2>
+    <div style="display:flex; gap:2rem; align-items:center; justify-content:center; flex-wrap:wrap;">
+      <div class="card" style="padding:2.5rem 3rem; text-align:center; border-color:var(--green);">
+        <div style="font-size:4rem; font-family:'Lexend',sans-serif; font-weight:700; color:var(--green);">80%</div>
+        <p style="font-size:1.1rem; margin-top:0.5rem; font-weight:600;">You can build it</p>
+        <p style="font-size:0.95rem; color:var(--text-muted); margin-top:0.5rem; max-width:250px;">With AI tools + these skills,<br>you can handle most of what<br>your business needs.</p>
+      </div>
+      <div class="card" style="padding:2.5rem 3rem; text-align:center; border-color:var(--purple);">
+        <div style="font-size:4rem; font-family:'Lexend',sans-serif; font-weight:700; color:var(--purple);">20%</div>
+        <p style="font-size:1.1rem; margin-top:0.5rem; font-weight:600;">Hire an engineer</p>
+        <p style="font-size:0.95rem; color:var(--text-muted); margin-top:0.5rem; max-width:250px;">Complex infrastructure,<br>security-critical systems,<br>and scale optimization.</p>
+      </div>
+    </div>
+    <p style="margin-top:2rem; font-size:1.15rem; color:var(--blue); font-weight:600;">The goal isn't to replace engineers — it's to stop waiting for them.</p>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>19 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 20: Getting Started ===================== -->
+<div class="slide" data-title="Getting Started">
+  <div class="slide-inner">
+    <p class="label">Action Items</p>
+    <h2>Getting Started Today</h2>
+    <div class="flex-col" style="gap:1.25rem; margin-top:1.5rem; max-width:700px;">
+      <div class="card" style="display:flex; gap:1.25rem; align-items:center;">
+        <div class="step-num" style="background:var(--blue);">1</div>
+        <div>
+          <h3>Sign up for Claude Pro — $20/mo</h3>
+          <p style="font-size:0.95rem; color:var(--text-muted);"><a href="https://claude.ai" style="color:var(--blue);">claude.ai</a> — This is your primary AI partner for specs, code, and iteration.</p>
+        </div>
+      </div>
+      <div class="card" style="display:flex; gap:1.25rem; align-items:center;">
+        <div class="step-num" style="background:var(--purple);">2</div>
+        <div>
+          <h3>Install Claude Code (free with Pro)</h3>
+          <p style="font-size:0.95rem; color:var(--text-muted);">Terminal-based coding agent. This is what actually builds your projects.</p>
+        </div>
+      </div>
+      <div class="card" style="display:flex; gap:1.25rem; align-items:center;">
+        <div class="step-num" style="background:var(--green);">3</div>
+        <div>
+          <h3>Pick ONE thing to build</h3>
+          <p style="font-size:0.95rem; color:var(--text-muted);">An internal tool. A personal dashboard. A landing page. Something small and useful.</p>
+        </div>
+      </div>
+      <div class="card" style="display:flex; gap:1.25rem; align-items:center;">
+        <div class="step-num" style="background:#D97706;">4</div>
+        <div>
+          <h3>Start with the spec conversation</h3>
+          <p style="font-size:0.95rem; color:var(--text-muted);">Open Claude. Describe what you want. Let it ask questions. Get to a spec. Then build.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>20 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 21: Resources ===================== -->
+<div class="slide" data-title="Resources">
+  <div class="slide-inner">
+    <p class="label">Learn More</p>
+    <h2>Resources &amp; Links</h2>
+    <div class="grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <h3 style="margin-bottom:0.75rem;">🔧 Tools to Start With</h3>
+        <ul style="list-style:none; padding:0;">
+          <li style="padding:0.4rem 0; font-size:0.95rem;"><span style="color:var(--blue); font-weight:600;">Claude Pro</span> → claude.ai</li>
+          <li style="padding:0.4rem 0; font-size:0.95rem;"><span style="color:var(--blue); font-weight:600;">Claude Code</span> → docs.anthropic.com</li>
+          <li style="padding:0.4rem 0; font-size:0.95rem;"><span style="color:var(--blue); font-weight:600;">Vercel</span> → vercel.com</li>
+          <li style="padding:0.4rem 0; font-size:0.95rem;"><span style="color:var(--blue); font-weight:600;">Supabase</span> → supabase.com</li>
+          <li style="padding:0.4rem 0; font-size:0.95rem;"><span style="color:var(--blue); font-weight:600;">GitHub</span> → github.com</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:0.75rem;">📚 Learning Resources</h3>
+        <ul style="list-style:none; padding:0;">
+          <li style="padding:0.4rem 0; font-size:0.95rem;"><span style="color:var(--blue); font-weight:600;">Anthropic Docs</span> → Best practices for prompting</li>
+          <li style="padding:0.4rem 0; font-size:0.95rem;"><span style="color:var(--blue); font-weight:600;">Vercel Templates</span> → Pre-built starting points</li>
+          <li style="padding:0.4rem 0; font-size:0.95rem;"><span style="color:var(--blue); font-weight:600;">Supabase Tutorials</span> → Database & auth guides</li>
+          <li style="padding:0.4rem 0; font-size:0.95rem;"><span style="color:var(--blue); font-weight:600;">YouTube</span> → "Claude Code tutorial" / "Cursor tutorial"</li>
+        </ul>
+      </div>
+      <div class="card" style="grid-column:1/-1; background:rgba(11,109,238,0.04); border-color:var(--blue);">
+        <h3 style="margin-bottom:0.5rem;">💬 Connect with me</h3>
+        <p style="font-size:1rem;">Mike Maseda — <span style="color:var(--blue);">mike@mamv.co</span> — Happy to chat about your project ideas.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>21 / 22</span></div>
+</div>
+
+<!-- ===================== SLIDE 22: Q&A ===================== -->
+<div class="slide" data-title="Q&A">
+  <div class="slide-inner" style="text-align:center; align-items:center;">
+    <h1 style="font-size:3rem; margin-bottom:0.5rem;">Questions?</h1>
+    <p class="subtitle" style="margin-bottom:2rem;">Let's talk about what you want to build.</p>
+    <div class="card" style="display:inline-block; padding:2rem 3rem; background:rgba(11,109,238,0.04); border-color:var(--blue);">
+      <p style="font-size:1.2rem; font-weight:600; color:var(--blue);">Mike Maseda</p>
+      <p style="font-size:1rem; color:var(--text-muted); margin-top:0.25rem;">mike@mamv.co</p>
+      <p style="font-size:0.95rem; color:var(--text-muted); margin-top:0.25rem;">Head of Sales &amp; Ops, GenHealth &nbsp;|&nbsp; AI Consultant, MAMV Ventures</p>
+    </div>
+    <p style="margin-top:2rem; font-size:1.1rem; color:var(--text-muted);">Remember: the hardest part is starting.<br>Pick one thing. Build it this week.</p>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>22 / 22</span></div>
+</div>
+
+</div><!-- .deck -->
+
+<!-- Nav dots -->
+<div id="nav"></div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  // Build nav dots
+  const nav = document.getElementById('nav');
+  slides.forEach((s, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.title = s.dataset.title || `Slide ${i + 1}`;
+    dot.addEventListener('click', () => goTo(i));
+    nav.appendChild(dot);
+  });
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    nav.children[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    nav.children[current].classList.add('active');
+    document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goTo(current - 1); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  });
+
+  // Touch/swipe support
+  let touchX = 0;
+  document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1));
+  });
+
+  // Init progress
+  document.getElementById('progress').style.width = (1 / total * 100) + '%';
+})();
+</script>
+</body>
+</html>
