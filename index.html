@@ -128,10 +128,20 @@ p, li { font-size: 1.15rem; line-height: 1.6; color: var(--text-sec); }
 }
 .dot {
   width: 10px; height: 10px; border-radius: 50%; border: none; cursor: pointer;
-  background: #ADB5BD; transition: all 0.3s;
+  background: #ADB5BD; transition: all 0.3s; position: relative;
 }
 .dot.active { background: var(--blue); box-shadow: 0 0 8px rgba(11,109,238,0.5); }
 .dot:hover { background: var(--blue); }
+.dot::after {
+  content: attr(data-label);
+  position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  background: rgba(20,20,30,0.95); color: #fff; font-size: 11px; font-weight: 500;
+  padding: 5px 10px; border-radius: 6px; white-space: nowrap;
+  pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s;
+  margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.dot:hover::after { opacity: 1; }
 
 /* Code block style */
 .code-block {
@@ -1298,7 +1308,8 @@ with date-stamped filename.</div>
   slides.forEach((s, i) => {
     const dot = document.createElement('button');
     dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dot.title = s.dataset.title || `Slide ${i + 1}`;
+    const label = s.dataset.title || `Slide ${i + 1}`;
+    dot.setAttribute('data-label', `${i + 1}. ${label}`);
     dot.addEventListener('click', () => goTo(i));
     nav.appendChild(dot);
   });
