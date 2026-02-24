@@ -1146,7 +1146,100 @@ with date-stamped filename.</div>
   <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>24 / 30</span></div>
 </div>
 
-<!-- ===================== SLIDE 24: Pricing ===================== -->
+<!-- ===================== SLIDE 24: Security Basics ===================== -->
+<div class="slide" data-title="Security Basics">
+  <div class="slide-inner">
+    <p class="label">Software Engineering 101</p>
+    <h2>🔐 Security Basics for Non-Engineers</h2>
+    <p style="font-size:1rem; color:var(--text-muted); margin:0.75rem 0 1.25rem;">You don't need a CS degree to ship secure software. But you do need to know a few rules. These apply whether you wrote the code or Claude did.</p>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card" style="padding:1.5rem;">
+        <h3>Environment Variables & Secrets</h3>
+        <p style="font-size:0.95rem; color:var(--text-muted);">API keys, database passwords, and tokens go in a <strong>.env.local</strong> file — never in your code. This file is ignored by Git so it never gets uploaded to GitHub.</p>
+        <div style="background:#f0f0f5; border-radius:8px; padding:12px 16px; margin-top:0.75rem; font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:#333;">
+          DATABASE_URL=postgres://...<br>
+          STRIPE_SECRET_KEY=sk_live_...<br>
+          NEXTAUTH_SECRET=random_string
+        </div>
+        <p style="font-size:0.85rem; color:#dc3545; margin-top:0.6rem; font-weight:500;">If you accidentally push a key to GitHub, consider it compromised. Rotate it immediately.</p>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <h3>Row-Level Security (RLS)</h3>
+        <p style="font-size:0.95rem; color:var(--text-muted);">If you use Supabase, RLS is your most important security layer. It ensures users can only read/write <strong>their own data</strong> — enforced at the database level, not just your UI.</p>
+        <ul style="list-style:none; padding:0; margin:0.75rem 0 0 0; font-size:0.95rem; color:var(--text-muted);">
+          <li style="padding:0.3rem 0;">• Always enable RLS on every table</li>
+          <li style="padding:0.3rem 0;">• Write policies that check <code style="background:#f0f0f5; padding:2px 6px; border-radius:4px;">auth.uid()</code></li>
+          <li style="padding:0.3rem 0;">• Test by trying to access another user's data</li>
+          <li style="padding:0.3rem 0;">• Service role keys bypass RLS — keep them server-side only</li>
+        </ul>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <h3>HTTPS & Deployment</h3>
+        <p style="font-size:0.95rem; color:var(--text-muted);">If you deploy with Vercel, Netlify, or Cloudflare Pages — HTTPS is automatic. Never deploy over plain HTTP. Set environment variables in your hosting dashboard, not in code.</p>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <h3>The .gitignore File</h3>
+        <p style="font-size:0.95rem; color:var(--text-muted);">This file tells Git what to never upload. Your <strong>.env.local</strong>, <strong>node_modules/</strong>, and any credentials should be listed here. Claude usually creates this for you — but always double-check.</p>
+      </div>
+    </div>
+    <p style="margin-top:1.25rem; font-size:0.9rem; color:var(--text-muted);">Deep dive: <strong style="color:var(--blue);">codingformarketers.com</strong> — "Environment Variables & API Keys" section</p>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>24 / 30</span></div>
+</div>
+
+<!-- ===================== SLIDE 25: Auth Basics ===================== -->
+<div class="slide" data-title="Auth Basics">
+  <div class="slide-inner">
+    <p class="label">Software Engineering 101</p>
+    <h2>🔑 Authentication & Access Control</h2>
+    <p style="font-size:1rem; color:var(--text-muted); margin:0.75rem 0 1.25rem;">If your app has user accounts, you need auth. Don't build it from scratch — use a proven service. Here's the minimum you need to get right.</p>
+    <div class="grid-2" style="gap:1.5rem;">
+      <div class="card" style="padding:1.5rem;">
+        <h3>Use a Managed Auth Provider</h3>
+        <p style="font-size:0.95rem; color:var(--text-muted);">Never roll your own login system. Use <strong>Supabase Auth</strong>, <strong>Clerk</strong>, or <strong>Auth0</strong>. They handle password hashing, session tokens, email verification, and OAuth — things that are easy to get wrong and dangerous when you do.</p>
+        <ul style="list-style:none; padding:0; margin:0.75rem 0 0 0; font-size:0.95rem; color:var(--text-muted);">
+          <li style="padding:0.3rem 0;">🟢 <strong>Supabase Auth</strong> — Free tier, pairs with your database</li>
+          <li style="padding:0.3rem 0;">🟢 <strong>Clerk</strong> — Beautiful drop-in UI components</li>
+          <li style="padding:0.3rem 0;">🟢 <strong>Auth0</strong> — Enterprise-grade, complex setups</li>
+        </ul>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <h3>Server vs. Client: Know the Difference</h3>
+        <p style="font-size:0.95rem; color:var(--text-muted);">Your app has two sides. <strong>The client</strong> (browser) is visible to everyone — never trust it with secrets. <strong>The server</strong> is private — this is where sensitive operations happen.</p>
+        <ul style="list-style:none; padding:0; margin:0.75rem 0 0 0; font-size:0.95rem; color:var(--text-muted);">
+          <li style="padding:0.3rem 0;">• <strong>Anon key</strong> → safe for the browser (limited access)</li>
+          <li style="padding:0.3rem 0;">• <strong>Service role key</strong> → server only (full access, bypasses RLS)</li>
+          <li style="padding:0.3rem 0;">• API routes / server actions = your secure backend</li>
+        </ul>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <h3>The Auth Checklist</h3>
+        <ul style="list-style:none; padding:0; margin:0.25rem 0 0 0; font-size:0.95rem; color:var(--text-muted);">
+          <li style="padding:0.3rem 0;">✅ Login + sign-up pages exist</li>
+          <li style="padding:0.3rem 0;">✅ Protected routes redirect unauthenticated users</li>
+          <li style="padding:0.3rem 0;">✅ RLS policies filter data by <code style="background:#f0f0f5; padding:2px 6px; border-radius:4px;">auth.uid()</code></li>
+          <li style="padding:0.3rem 0;">✅ Service role key is only used in server-side code</li>
+          <li style="padding:0.3rem 0;">✅ OAuth callback URLs configured in provider dashboard</li>
+          <li style="padding:0.3rem 0;">✅ Password reset flow works end-to-end</li>
+        </ul>
+      </div>
+      <div class="card" style="padding:1.5rem;">
+        <h3>Common Auth Mistakes</h3>
+        <ul style="list-style:none; padding:0; margin:0.25rem 0 0 0; font-size:0.95rem; color:var(--text-muted);">
+          <li style="padding:0.3rem 0;">❌ Hiding UI buttons instead of enforcing access server-side</li>
+          <li style="padding:0.3rem 0;">❌ Using the service role key in browser code</li>
+          <li style="padding:0.3rem 0;">❌ Forgetting to add a sign-up page (login only)</li>
+          <li style="padding:0.3rem 0;">❌ No RLS policies — any user can read all data</li>
+          <li style="padding:0.3rem 0;">❌ Not testing what happens when a logged-out user hits a protected page</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:1.25rem; font-size:0.9rem; color:var(--text-muted);">Learn more: <strong style="color:var(--blue);">codingformarketers.com</strong> — covers the full software stack, auth, environment variables, and debugging</p>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>25 / 30</span></div>
+</div>
+
+<!-- ===================== SLIDE 26: Pricing ===================== -->
 <div class="slide" data-title="Pricing">
   <div class="slide-inner">
     <p class="label">Investment</p>
