@@ -1161,7 +1161,7 @@ with date-stamped filename.</div>
           STRIPE_SECRET_KEY=sk_live_...<br>
           NEXTAUTH_SECRET=random_string
         </div>
-        <p style="font-size:0.85rem; color:#dc3545; margin-top:0.6rem; font-weight:500;">If you accidentally push a key to GitHub, consider it compromised. Rotate it immediately.</p>
+        <p style="font-size:0.85rem; color:#dc3545; margin-top:0.6rem; font-weight:500;">If you accidentally push a key to GitHub, consider it compromised. Rotate it immediately. Also watch for TypeScript's <code style="background:#f0f0f5; padding:2px 6px; border-radius:4px;">process.env.KEY!</code> — the <code style="background:#f0f0f5; padding:2px 6px; border-radius:4px;">!</code> suppresses the "might be undefined" warning but crashes at runtime if the var isn't set.</p>
       </div>
       <div class="card" style="padding:1.5rem;">
         <h3>Row-Level Security (RLS)</h3>
@@ -1172,6 +1172,7 @@ with date-stamped filename.</div>
           <li style="padding:0.3rem 0;">• Test by trying to access another user's data</li>
           <li style="padding:0.3rem 0;">• Service role keys bypass RLS — keep them server-side only</li>
         </ul>
+        <p style="font-size:0.85rem; color:#dc3545; margin-top:0.6rem; font-weight:500;">⚠️ Real-world gotcha: Cron jobs & background tasks use the service role, where <code style="background:#f0f0f5; padding:2px 6px; border-radius:4px;">auth.uid()</code> is NULL. Your RLS policies will silently block them unless you add a policy for <code style="background:#f0f0f5; padding:2px 6px; border-radius:4px;">auth.role() = 'service_role'</code>.</p>
       </div>
       <div class="card" style="padding:1.5rem;">
         <h3>HTTPS & Deployment</h3>
@@ -1210,6 +1211,7 @@ with date-stamped filename.</div>
           <li style="padding:0.3rem 0;">• <strong>Anon key</strong> → safe for the browser (limited access)</li>
           <li style="padding:0.3rem 0;">• <strong>Service role key</strong> → server only (full access, bypasses RLS)</li>
           <li style="padding:0.3rem 0;">• API routes / server actions = your secure backend</li>
+          <li style="padding:0.3rem 0;">• <strong>Middleware ≠ server</strong> — Supabase middleware clients use the anon key, not the service role. RLS still applies!</li>
         </ul>
       </div>
       <div class="card" style="padding:1.5rem;">
@@ -1225,11 +1227,14 @@ with date-stamped filename.</div>
       </div>
       <div class="card" style="padding:1.5rem;">
         <h3>Common Auth Mistakes</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 0.5rem; font-style:italic;">These are real bugs found across multiple projects:</p>
         <ul style="list-style:none; padding:0; margin:0.25rem 0 0 0; font-size:0.95rem; color:var(--text-muted);">
           <li style="padding:0.3rem 0;">❌ Hiding UI buttons instead of enforcing access server-side</li>
           <li style="padding:0.3rem 0;">❌ Using the service role key in browser code</li>
-          <li style="padding:0.3rem 0;">❌ Forgetting to add a sign-up page (login only)</li>
+          <li style="padding:0.3rem 0;">❌ Querying "first user in database" instead of the actual authenticated user — a critical security bug that lets User A act as User B</li>
+          <li style="padding:0.3rem 0;">❌ Assuming middleware runs with service role permissions — it uses the <strong>anon key</strong>, so RLS still applies</li>
           <li style="padding:0.3rem 0;">❌ No RLS policies — any user can read all data</li>
+          <li style="padding:0.3rem 0;">❌ Self-referencing RLS policies (e.g., checking <code style="background:#f0f0f5; padding:2px 6px; border-radius:4px;">is_admin</code> on the same table being queried) — causes silent circular failures</li>
           <li style="padding:0.3rem 0;">❌ Not testing what happens when a logged-out user hits a protected page</li>
         </ul>
       </div>
