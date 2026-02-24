@@ -312,7 +312,7 @@ var rounds = [
     {q:"Is the $250k large loss threshold universal, or do different clients have different thresholds?",a:"Configurable per client"}
   ]},
   {num:2,time:"1:30 PM",topic:"Parse confidence, carrier count, concurrency handling",qas:[
-    {q:"When AI parsing has low confidence on a field (e.g., 60% sure the medical paid is $5,432), how should this surface to the user?",a:"Threshold-based \u2014 if under the threshold, then highlight in the UI."},
+    {q:"When AI parsing has low confidence on a field (e.g., 60% sure the medical paid is $4,850), how should this surface to the user?",a:"Threshold-based \u2014 if under the threshold, then highlight in the UI."},
     {q:"How many distinct carrier formats do you typically deal with?",a:"100+ carriers"},
     {q:"Will multiple users work on the same client simultaneously?",a:"Single user per client"}
   ]},
@@ -568,8 +568,8 @@ laterPhases.appendChild(makeCompactPhase('phase3','\u{1F680}','var(--user-bg)','
   'Kickoff & Directory Struggles','Phase 3 \u2014 1:53 PM - 1:57 PM',[
   {dot:'user',time:'1:53 PM',speaker:'user',name:'User',text:'<strong>"That works for me. Let\'s grip it and rip it!"</strong>'},
   {dot:'claude',time:'1:53 PM',speaker:'claude',name:'Claude',text:'Let\'s do it! Starting the build now.'},
-  {dot:'system',time:'1:55 PM',speaker:'system',name:'System Error',text:'<em>The shell\'s working directory no longer exists.</em> Shell was stuck because <code>/Users/mmaseda/Desktop/LossRunner</code> didn\'t exist yet.'},
-  {dot:'user',time:'1:56 PM',speaker:'user',name:'User',text:'"continue" ... "/Users/mmaseda/Desktop/loss-runner"'},
+  {dot:'system',time:'1:55 PM',speaker:'system',name:'System Error',text:'<em>The shell\'s working directory no longer exists.</em> Shell was stuck because <code>/Users/Mike/Desktop/LossRunner</code> didn\'t exist yet.'},
+  {dot:'user',time:'1:56 PM',speaker:'user',name:'User',text:'"continue" ... "/Users/Mike/Desktop/loss-runner"'},
   {dot:'claude',time:'1:57 PM',speaker:'claude',name:'Claude',text:'<em>Still struggling with shell...</em> The shell is completely blocked. Here\'s what you need to do...'},
   {dot:'user',time:'1:57 PM',speaker:'user',name:'User',text:'<strong>"LossRunner exists now"</strong>'},
   {dot:'claude',time:'1:57 PM',speaker:'claude',name:'Claude',text:'Shell is working. Let me initialize the project.'}
@@ -621,7 +621,7 @@ laterPhases.appendChild(makeCompactPhase('phase8','\u{1F916}','rgba(116,185,255,
   'Testing AI Parsing','Phase 8 \u2014 3:20 PM - 3:23 PM',[
   {dot:'user',time:'3:20 PM',speaker:'user',name:'User',text:'<strong>"If I upload a document as a loss run in the top right, it should automatically extract the claims."</strong>'},
   {dot:'user',time:'3:21 PM',speaker:'user',name:'User',text:'<em>(Shares screenshot)</em> Click there on the top right, and you can see there\'s a document that was uploaded, but there are still zero claims under this test client.'},
-  {dot:'claude',time:'3:22 PM',speaker:'claude',name:'Claude',text:'The Gemini API is working! It extracted 2 claims from the <code>Chubb_Federal.pdf</code>. The issue: these claims have no <code>policy_id</code> because "Test Client" doesn\'t have any policies. Check the Unassigned section.',extras:[{cls:'tl-highlight',html:'Working as designed \u2014 the AI correctly parsed the PDF, but claims need a policy to be assigned to.'}]}
+  {dot:'claude',time:'3:22 PM',speaker:'claude',name:'Claude',text:'The Gemini API is working! It extracted 2 claims from the <code>carrier_sample.pdf</code>. The issue: these claims have no <code>policy_id</code> because "Test Client" doesn\'t have any policies. Check the Unassigned section.',extras:[{cls:'tl-highlight',html:'Working as designed \u2014 the AI correctly parsed the PDF, but claims need a policy to be assigned to.'}]}
 ]));
 
 // Phase 9
@@ -651,7 +651,7 @@ laterPhases.appendChild(makeCompactPhase('phase11','\u{1F4B0}','var(--answer-bg)
   {dot:'claude',time:'3:57 PM',speaker:'claude',name:'Claude',text:'<em>Analyzed a 27-sheet Excel pricing model and presented a flow diagram of how all sheets connect.</em>'},
   {dot:'user',time:'4:00 PM',speaker:'user',name:'User',text:'<strong>"Looks good, let\'s build it all!"</strong>'},
   {dot:'claude',time:'9:00 - 4:17 PM',speaker:'claude',name:'Claude',text:'Built: NCCI code search (<strong>1,713 class codes</strong>, <strong>23,876 rates</strong>), pricing calculation engine, pricing output dashboard, data import scripts, pricing tab on client page.'},
-  {dot:'user',time:'4:17 PM',speaker:'user',name:'User',text:'<em>(Shares screenshot)</em> <strong>"I don\'t see anything pre-populated in the My Limousines pricing tab."</strong>'},
+  {dot:'user',time:'4:17 PM',speaker:'user',name:'User',text:'<em>(Shares screenshot)</em> <strong>"I don\'t see anything pre-populated in the Parkside Transport Co. pricing tab."</strong>'},
   {dot:'claude',time:'4:17 PM',speaker:'claude',name:'Claude',text:'The problem is PricingTab loads the data but doesn\'t pass it to PricingForm. <em>Fixed with key prop to force remount.</em>'},
   {dot:'user',time:'4:20 PM',speaker:'user',name:'User',text:'<strong>"I also want a PDF export summary of all the findings from the pricing so that I can share with others."</strong>'},
   {dot:'claude',time:'4:22 PM',speaker:'claude',name:'Claude',text:'PDF export is ready.'},
@@ -668,12 +668,12 @@ laterPhases.appendChild(makeCompactPhase('phase11','\u{1F4B0}','var(--answer-bg)
 // Phase 12
 laterPhases.appendChild(makeCompactPhase('phase12','\u2601','var(--user-bg)','var(--user)',
   'Deployment','Phase 12 \u2014 4:44 PM - 5:01 PM',[
-  {dot:'user',time:'4:44 PM',speaker:'user',name:'User',text:'<strong>"Are we logged in as mike32snake in GitHub?"</strong>'},
-  {dot:'claude',time:'4:45 PM',speaker:'claude',name:'Claude',text:'No, the active account is mikeGenhealth.'},
-  {dot:'user',time:'4:45 PM',speaker:'user',name:'User',text:'<strong>"Yes switch."</strong> ... <strong>"What about for the Vercel CLI? Are we logged in as mike@mamv.co?"</strong>'},
+  {dot:'user',time:'4:44 PM',speaker:'user',name:'User',text:'<strong>"Are we logged in as mikePersonal in GitHub?"</strong>'},
+  {dot:'claude',time:'4:45 PM',speaker:'claude',name:'Claude',text:'No, the active account is mikeWork.'},
+  {dot:'user',time:'4:45 PM',speaker:'user',name:'User',text:'<strong>"Yes switch."</strong> ... <strong>"What about for the Vercel CLI? Are we logged in as mike@example.com?"</strong>'},
   {dot:'user',time:'4:48 PM',speaker:'user',name:'User',text:'<strong>"Now we want to deploy this application to Vercel. Let\'s first upload it to GitHub, making sure it\'s a private repo. Then push it from GitHub to Vercel using the CLI."</strong>'},
   {dot:'system',time:'9:48 - 4:59 PM',speaker:'system',name:'Deployment',text:'<em>Deployment had a couple bumps: missing env vars, git author mismatch, one more TypeScript error.</em>'},
-  {dot:'claude',time:'4:59 PM',speaker:'claude',name:'Claude',text:'<strong>Done! Deployment successful.</strong> GitHub: <code>github.com/mike32snake/loss-runner</code> (private). Vercel: deployed.'},
+  {dot:'claude',time:'4:59 PM',speaker:'claude',name:'Claude',text:'<strong>Done! Deployment successful.</strong> GitHub: <code>github.com/mikePersonal/loss-runner</code> (private). Vercel: deployed.'},
   {dot:'user',time:'5:00 PM',speaker:'user',name:'User',text:'<em>(Shares logo image)</em> <strong>"Can you make this the favicon?"</strong>'},
   {dot:'claude',time:'5:01 PM',speaker:'claude',name:'Claude',text:'Done. Added <code>src/app/icon.png</code>.'}
 ]));
