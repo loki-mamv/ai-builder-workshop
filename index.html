@@ -620,49 +620,60 @@ Just me using it for now.</div>
   <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>12 / 30</span></div>
 </div>
 
-<!-- ===================== SLIDE 13: Step 2 — Claude Code Takes Over ===================== -->
-<div class="slide" data-title="Step 2: Claude Code">
+<!-- ===================== SLIDE 13: Step 2 — The Conversation ===================== -->
+<div class="slide" data-title="Step 2: The Conversation">
   <div class="slide-inner">
     <p class="label">Step 2</p>
-    <h2>Claude Code Takes Over</h2>
-    <div class="grid-2" style="margin-top:1.25rem;">
+    <h2>The Conversation — A Real Example</h2>
+    <div class="card" style="padding:1.5rem; margin:1rem 0;">
+      <h3>🏗️ Building LossRunner — One Afternoon</h3>
+      <p style="font-size:0.95rem; color:var(--text-muted);">A real Workers' Comp loss run management app built in a <strong>single 3.5 hour session</strong>. No code written by hand. Just a conversation between a non-technical founder and Claude Code.</p>
+    </div>
+    <div class="grid-2" style="gap:1.5rem;">
       <div class="flex-col" style="gap:1rem;">
-        <div class="card">
-          <h3>🤝 It's Collaborative, Not Magic</h3>
-          <p style="font-size:0.95rem;">Claude Code reads your spec, asks follow-up questions, then starts generating code file by file.</p>
+        <div class="card" style="padding:1.25rem;">
+          <h3>🎙️ Phase 1: Discovery Interview</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted);">Claude asked <strong>63 questions</strong> in 19 minutes — understanding the business, user types, data flows, and edge cases before writing a single line of code.</p>
         </div>
-        <div class="card">
-          <h3>📁 It Creates Everything</h3>
-          <p style="font-size:0.95rem;">Project structure, database schemas, API routes, UI components, styling — the full stack.</p>
+        <div class="card" style="padding:1.25rem;">
+          <h3>📋 Phase 2: Spec Generation</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted);">Claude turned the answers into a detailed product spec — database schema, API routes, UI components, user roles — and asked for approval before building.</p>
         </div>
-        <div class="card">
-          <h3>💬 You Stay in the Loop</h3>
-          <p style="font-size:0.95rem;">It explains what it's doing and why. You approve, redirect, or ask questions along the way.</p>
+        <div class="card" style="padding:1.25rem;">
+          <h3>⚡ Phase 3: Build & Iterate</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted);">Full-stack app created file by file. Auth, dashboard, PDF parsing, loss run comparison engine — all from the conversation. Tested and refined in real time.</p>
         </div>
       </div>
       <div>
-        <div class="code-block" style="font-size:0.82rem; height:100%;">
-<span class="ai">Claude Code:</span> I'll set up the project:
+        <div class="code-block" style="font-size:0.78rem; height:100%;">
+<span class="ai">Claude:</span> Before I write any code,
+let me understand your business.
 
-<span class="comment">Creating files...</span>
- ✓ package.json
- ✓ src/app/layout.tsx
- ✓ src/app/page.tsx
- ✓ src/app/dashboard/page.tsx
- ✓ src/lib/supabase.ts
- ✓ supabase/migrations/001_init.sql
- ✓ src/components/Pipeline.tsx
- ✓ src/components/ClientCard.tsx
+<span class="comment">📋 63 discovery questions later...</span>
 
-<span class="comment">Installing dependencies...</span>
- ✓ next, react, @supabase/supabase-js
+<span class="ai">Claude:</span> Here's what I'll build:
+ • Next.js + Supabase + Tailwind
+ • Multi-tenant auth (broker/carrier)
+ • PDF upload + AI extraction
+ • Loss run comparison engine
+ • Auto-generated renewal reports
 
-<span class="ai">Ready to test.</span> Run `npm run dev`
-to see it locally.
+<span class="comment">You said "looks good, build it."</span>
 
-<span class="comment">Want me to add the auth flow next?</span></div>
+<span class="ai">Claude:</span> Creating files...
+ ✓ 47 files generated
+ ✓ Database migrations
+ ✓ Auth + role-based access
+ ✓ PDF parsing pipeline
+ ✓ Dashboard with analytics
+
+<span class="comment">3.5 hours. One conversation.</span>
+<span class="comment">Zero lines of code written by hand.</span></div>
       </div>
     </div>
+    <p style="margin-top:1rem; text-align:center;">
+      <a href="lossrunner.html" target="_blank" style="color:var(--blue); font-weight:600; font-size:1rem; text-decoration:none; border-bottom:2px solid var(--blue); padding-bottom:2px;">📖 Read the full conversation →</a>
+    </p>
   </div>
   <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>13 / 30</span></div>
 </div>
