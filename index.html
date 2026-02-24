@@ -633,57 +633,46 @@ Just me using it for now.</div>
 
 <!-- ===================== SLIDE 13: Step 2 — The Conversation ===================== -->
 <div class="slide" data-title="Step 2: The Conversation">
-  <div class="slide-inner">
+  <div class="slide-inner" style="padding-top:1.5rem;">
     <p class="label">Step 2</p>
-    <h2>The Conversation — A Real Example</h2>
-    <div class="card" style="padding:1.5rem; margin:1rem 0;">
-      <h3>🏗️ Building LossRunner — One Afternoon</h3>
-      <p style="font-size:0.95rem; color:var(--text-muted);">A real Workers' Comp loss run management app built in a <strong>single 3.5 hour session</strong>. No code written by hand. Just a conversation between a non-technical founder and Claude Code.</p>
-    </div>
-    <div class="grid-2" style="gap:1.5rem;">
-      <div class="flex-col" style="gap:1rem;">
-        <div class="card" style="padding:1.25rem;">
-          <h3>🎙️ Phase 1: Discovery Interview</h3>
-          <p style="font-size:0.9rem; color:var(--text-muted);">Claude asked <strong>63 questions</strong> in 19 minutes — understanding the business, user types, data flows, and edge cases before writing a single line of code.</p>
+    <h2 style="margin-bottom:0.75rem;">The Conversation — A Real Example</h2>
+    <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">🏗️ <strong>LossRunner</strong> — a Workers' Comp loss run app built in <strong>3.5 hours</strong>. No code written by hand. <a href="lossrunner.html" target="_blank" style="color:var(--blue); text-decoration:none; border-bottom:1px solid var(--blue);">Read the full conversation →</a></p>
+    <div class="grid-2" style="gap:1rem;">
+      <div class="flex-col" style="gap:0.6rem;">
+        <div class="card" style="padding:0.9rem;">
+          <h3 style="font-size:0.95rem;">🎙️ Phase 1: Discovery</h3>
+          <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.25rem;"><strong>63 questions</strong> in 19 min — business logic, user types, data flows, edge cases.</p>
         </div>
-        <div class="card" style="padding:1.25rem;">
-          <h3>📋 Phase 2: Spec Generation</h3>
-          <p style="font-size:0.9rem; color:var(--text-muted);">Claude turned the answers into a detailed product spec — database schema, API routes, UI components, user roles — and asked for approval before building.</p>
+        <div class="card" style="padding:0.9rem;">
+          <h3 style="font-size:0.95rem;">📋 Phase 2: Spec</h3>
+          <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.25rem;">Answers → detailed product spec. Schema, APIs, components, roles. Approval before building.</p>
         </div>
-        <div class="card" style="padding:1.25rem;">
-          <h3>⚡ Phase 3: Build & Iterate</h3>
-          <p style="font-size:0.9rem; color:var(--text-muted);">Full-stack app created file by file. Auth, dashboard, PDF parsing, loss run comparison engine — all from the conversation. Tested and refined in real time.</p>
+        <div class="card" style="padding:0.9rem;">
+          <h3 style="font-size:0.95rem;">⚡ Phase 3: Build</h3>
+          <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.25rem;">47 files. Auth, dashboard, PDF parsing, comparison engine. Tested and refined live.</p>
         </div>
-        <a href="lossrunner.html" target="_blank" style="color:var(--blue); font-weight:600; font-size:0.95rem; text-decoration:none; border-bottom:2px solid var(--blue); padding-bottom:2px; display:inline-block; margin-top:0.5rem;">📖 Read the full conversation →</a>
       </div>
       <div>
-        <div class="code-block" style="font-size:0.78rem; height:100%;">
+        <div class="code-block" style="font-size:0.75rem; height:100%; padding:1rem;">
 <span class="user">You:</span> Read this SPEC and interview me in detail using AskUserQuestion about literally anything: technical implementation, UI & UX, concerns, tradeoffs, etc. Make sure the questions are not obvious. Be very in-depth and continue interviewing me until it's complete, then write the spec to the file.
 
-<span class="comment">📋 63 discovery questions later...</span>
-<span class="comment">h/t <a href="https://x.com/trq212" target="_blank" style="color:var(--accent);text-decoration:none;">@trq212</a> for the prompt 🙏</span>
+<span class="comment">📋 63 questions later... h/t <a href="https://x.com/trq212" target="_blank" style="color:var(--accent);text-decoration:none;">@trq212</a> 🙏</span>
 
 <span class="ai">Claude:</span> Here's what I'll build:
  • Next.js + Supabase + Tailwind
  • Multi-tenant auth (broker/carrier)
  • PDF upload + AI extraction
  • Loss run comparison engine
- • Auto-generated renewal reports
 
-<span class="comment">You said "looks good, build it."</span>
+<span class="comment">You: "looks good, build it."</span>
 
 <span class="ai">Claude:</span> Creating files...
- ✓ 47 files generated
- ✓ Database migrations
- ✓ Auth + role-based access
- ✓ PDF parsing pipeline
- ✓ Dashboard with analytics
+ ✓ 47 files · DB migrations · Auth
+ ✓ PDF pipeline · Dashboard
 
-<span class="comment">3.5 hours. One conversation.</span>
-<span class="comment">Zero lines of code written by hand.</span></div>
+<span class="comment">3.5 hours. Zero hand-written code.</span></div>
       </div>
     </div>
-    <!-- link moved under Phase 3 -->
   </div>
   <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>13 / 30</span></div>
 </div>
