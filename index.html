@@ -1757,7 +1757,7 @@ async function handleGateSubmit(e) {
   if (!email || !email.includes('@')) { err.textContent = 'Please enter a valid email.'; return false; }
   btn.disabled = true; btn.textContent = 'Unlocking...'; err.textContent = '';
   try {
-    await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'text/plain'}, body: JSON.stringify({email, source:'ai-builder-workshop'}) });
+    await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type':'text/plain'}, body: JSON.stringify({timestamp: new Date().toISOString(), email: email, firstName: '', lastName: '', source: 'ai-builder-workshop'}) });
   } catch(x) {}
   localStorage.setItem(GATE_KEY, email);
   document.getElementById('emailGate').classList.add('hidden');
