@@ -1817,9 +1817,28 @@ Home
         Get the raw Markdown file — fill it in directly, use it as a Claude prompt,
         or share it with your co-founder.
       </p>
-      <button class="btn-download" onclick="downloadMarkdown()">
-        ▼ Download saas-scoping-framework.md
-      </button>
+
+      <!-- Email gate form -->
+      <div id="download-gate">
+        <form id="download-form" onsubmit="return handleDownloadGate(event)" style="display:flex; flex-direction:column; gap:10px; max-width:400px; margin:20px auto 0;">
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="dl-firstName" placeholder="First name" required style="flex:1; padding:10px 12px; background:#fff; border:2px solid #999; font-family:'Courier New',monospace; font-size:14px; color:#1a1a2e; box-shadow:inset 2px 2px 0 #e8e8e8;">
+            <input type="text" id="dl-lastName" placeholder="Last name" required style="flex:1; padding:10px 12px; background:#fff; border:2px solid #999; font-family:'Courier New',monospace; font-size:14px; color:#1a1a2e; box-shadow:inset 2px 2px 0 #e8e8e8;">
+          </div>
+          <input type="email" id="dl-email" placeholder="your@email.com" required style="padding:10px 12px; background:#fff; border:2px solid #999; font-family:'Courier New',monospace; font-size:14px; color:#1a1a2e; box-shadow:inset 2px 2px 0 #e8e8e8;">
+          <button type="submit" id="dl-btn" style="padding:12px; background:#1a1a2e; color:#fff; font-family:'Courier New',monospace; font-size:14px; font-weight:bold; text-transform:uppercase; letter-spacing:2px; border:none; cursor:pointer; box-shadow:4px 4px 0 #888; transition:all 0.1s;">▼ DOWNLOAD .MD FILE</button>
+          <div id="dl-error" style="color:#c0392b; font-size:12px; min-height:16px; text-align:center;"></div>
+        </form>
+        <p style="font-size:11px; color:#888; text-align:center; margin-top:8px;">Enter your email to download. No spam — just occasional AI builder tips.</p>
+      </div>
+
+      <!-- Post-gate: direct download button (hidden until submitted) -->
+      <div id="download-unlocked" style="display:none; margin-top:20px;">
+        <button class="btn-download" onclick="downloadMarkdown()">
+          ▼ Download saas-scoping-framework.md
+        </button>
+        <p style="font-size:12px; color:#4a8c3f; text-align:center; margin-top:8px;">✓ Unlocked — download anytime</p>
+      </div>
     </div>
   </section>
 
@@ -1834,6 +1853,49 @@ Home
 
 <!-- ===== JAVASCRIPT ===== -->
 <script>
+  // ─── EMAIL GATE FOR DOWNLOAD ────────────────────────────────────────────────
+  const DL_GATE_KEY = 'saas-framework-email';
+  const DL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbwUqO3zauyG_tuCZk0NALIDybayC7JhTbSm7RcQhivv6Lq0XCrQ8YgopTFqXjMSwt72/exec';
+
+  // Check if already unlocked
+  if (localStorage.getItem(DL_GATE_KEY)) {
+    document.getElementById('download-gate').style.display = 'none';
+    document.getElementById('download-unlocked').style.display = 'block';
+  }
+
+  async function handleDownloadGate(e) {
+    e.preventDefault();
+    const firstName = document.getElementById('dl-firstName').value.trim();
+    const lastName = document.getElementById('dl-lastName').value.trim();
+    const email = document.getElementById('dl-email').value.trim();
+    const btn = document.getElementById('dl-btn');
+    const err = document.getElementById('dl-error');
+
+    if (!email || !email.includes('@')) { err.textContent = 'Please enter a valid email.'; return false; }
+    btn.disabled = true; btn.textContent = 'UNLOCKING...'; err.textContent = '';
+
+    try {
+      await fetch(DL_APPS_SCRIPT, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          role: '',
+          source: 'saas-scoping-framework'
+        })
+      });
+    } catch(x) {}
+
+    localStorage.setItem(DL_GATE_KEY, email);
+    document.getElementById('download-gate').style.display = 'none';
+    document.getElementById('download-unlocked').style.display = 'block';
+    downloadMarkdown(); // Auto-trigger download
+    return false;
+  }
+
   // ─── PROGRESS BAR ───────────────────────────────────────────────────────────
   const bar = document.getElementById('progress-bar');
   window.addEventListener('scroll', () => {
