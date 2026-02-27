@@ -700,70 +700,76 @@ p, li { font-size: 1.15rem; line-height: 1.6; color: var(--text-sec); }
   <div class="slide-inner">
     <p class="label">Architecture</p>
     <h2>How It All Connects</h2>
-    <p style="margin-bottom:1.5rem; font-size:1rem; color:var(--text-muted);">Here's how the pieces fit together when you're building a real app:</p>
+    <p style="margin-bottom:0.75rem; font-size:1rem; color:var(--text-muted);">Here's how the pieces fit together when you're building a real app:</p>
 
-    <!-- Visual flow diagram -->
+    <!-- Visual flow diagram - compact -->
     <div style="position:relative; max-width:900px; margin:0 auto;">
-      <!-- Row 1: You + Claude Code -->
-      <div style="display:flex; justify-content:center; gap:2rem; margin-bottom:0.5rem;">
-        <div class="card" style="text-align:center; padding:1.25rem 2rem; background:rgba(90,73,225,0.06); border-color:var(--purple); min-width:200px;">
-          <div style="font-size:1.5rem; margin-bottom:0.4rem;">🧑‍💻</div>
-          <h3 style="color:var(--purple); font-size:1.1rem;">You</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Describe what you want<br>in plain English</p>
+      <!-- Row 1: You → Claude Code → GitHub (horizontal) -->
+      <div style="display:flex; justify-content:center; align-items:center; gap:1rem; margin-bottom:0.3rem;">
+        <div class="card" style="text-align:center; padding:0.75rem 1.25rem; background:rgba(90,73,225,0.06); border-color:var(--purple);">
+          <div style="display:flex; align-items:center; gap:0.5rem; justify-content:center;">
+            <span style="font-size:1.2rem;">🧑‍💻</span>
+            <h3 style="color:var(--purple); font-size:0.95rem; margin:0;">You</h3>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem;">Plain English</p>
         </div>
-        <div style="display:flex; align-items:center; font-size:1.5rem; color:var(--purple);">→</div>
-        <div class="card" style="text-align:center; padding:1.25rem 2rem; background:rgba(217,119,6,0.06); border-color:#D97706; min-width:200px;">
-          <div style="font-size:1.5rem; margin-bottom:0.4rem;">🤖</div>
-          <h3 style="color:#D97706; font-size:1.1rem;">Claude Code</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Writes the code,<br>creates files, runs commands</p>
+        <span style="font-size:1.2rem; color:var(--purple);">→</span>
+        <div class="card" style="text-align:center; padding:0.75rem 1.25rem; background:rgba(217,119,6,0.06); border-color:#D97706;">
+          <div style="display:flex; align-items:center; gap:0.5rem; justify-content:center;">
+            <span style="font-size:1.2rem;">🤖</span>
+            <h3 style="color:#D97706; font-size:0.95rem; margin:0;">Claude Code</h3>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem;">Writes code & runs commands</p>
         </div>
-      </div>
-
-      <!-- Arrow down -->
-      <div style="text-align:center; font-size:1.5rem; color:var(--blue); margin:0.25rem 0;">↓</div>
-
-      <!-- Row 2: GitHub -->
-      <div style="display:flex; justify-content:center; margin-bottom:0.5rem;">
-        <div class="card" style="text-align:center; padding:1rem 3rem; min-width:300px;">
-          <div style="font-size:1.5rem; margin-bottom:0.4rem;">🐙</div>
-          <h3 style="font-size:1.1rem;">GitHub</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Saves every version of your code — your undo button</p>
-        </div>
-      </div>
-
-      <!-- Arrow down -->
-      <div style="text-align:center; font-size:1.5rem; color:var(--blue); margin:0.25rem 0;">↓ auto-deploys</div>
-
-      <!-- Row 3: Vercel + Supabase side by side -->
-      <div style="display:flex; justify-content:center; gap:2rem; margin-bottom:0.5rem;">
-        <div class="card" style="text-align:center; padding:1.25rem 2rem; background:rgba(11,109,238,0.04); border-color:var(--blue); min-width:200px;">
-          <div style="font-size:1.5rem; margin-bottom:0.4rem;">▲</div>
-          <h3 style="color:var(--blue); font-size:1.1rem;">Vercel</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Hosts your app<br>on the internet</p>
-        </div>
-        <div style="display:flex; align-items:center; font-size:1.2rem; color:var(--text-muted);">↔</div>
-        <div class="card" style="text-align:center; padding:1.25rem 2rem; background:rgba(70,209,154,0.06); border-color:var(--green); min-width:200px;">
-          <div style="font-size:1.5rem; margin-bottom:0.4rem;">⚡</div>
-          <h3 style="color:var(--green); font-size:1.1rem;">Supabase</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Stores your data,<br>handles login</p>
+        <span style="font-size:1.2rem; color:var(--blue);">→</span>
+        <div class="card" style="text-align:center; padding:0.75rem 1.25rem;">
+          <div style="display:flex; align-items:center; gap:0.5rem; justify-content:center;">
+            <span style="font-size:1.2rem;">🐙</span>
+            <h3 style="font-size:0.95rem; margin:0;">GitHub</h3>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem;">Saves & versions your code</p>
         </div>
       </div>
 
       <!-- Arrow down -->
-      <div style="text-align:center; font-size:1.5rem; color:var(--green); margin:0.25rem 0;">↓</div>
+      <div style="text-align:center; font-size:1.1rem; color:var(--blue); margin:0.15rem 0; padding-left:12rem;">↓ auto-deploys</div>
 
-      <!-- Row 4: Users -->
+      <!-- Row 2: Vercel ↔ Supabase -->
+      <div style="display:flex; justify-content:center; align-items:center; gap:1.5rem; margin-bottom:0.3rem;">
+        <div class="card" style="text-align:center; padding:0.75rem 1.5rem; background:rgba(11,109,238,0.04); border-color:var(--blue);">
+          <div style="display:flex; align-items:center; gap:0.5rem; justify-content:center;">
+            <span style="font-size:1.2rem;">▲</span>
+            <h3 style="color:var(--blue); font-size:0.95rem; margin:0;">Vercel</h3>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem;">Hosts your app on the internet</p>
+        </div>
+        <span style="font-size:1rem; color:var(--text-muted);">↔</span>
+        <div class="card" style="text-align:center; padding:0.75rem 1.5rem; background:rgba(70,209,154,0.06); border-color:var(--green);">
+          <div style="display:flex; align-items:center; gap:0.5rem; justify-content:center;">
+            <span style="font-size:1.2rem;">⚡</span>
+            <h3 style="color:var(--green); font-size:0.95rem; margin:0;">Supabase</h3>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem;">Stores data & handles login</p>
+        </div>
+      </div>
+
+      <!-- Arrow down -->
+      <div style="text-align:center; font-size:1.1rem; color:var(--green); margin:0.15rem 0;">↓</div>
+
+      <!-- Row 3: Users -->
       <div style="display:flex; justify-content:center;">
-        <div class="card" style="text-align:center; padding:1rem 3rem; background:rgba(70,209,154,0.04); border-color:var(--green); min-width:300px;">
-          <div style="font-size:1.5rem; margin-bottom:0.4rem;">👥</div>
-          <h3 style="font-size:1.1rem;">Your Users</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Visit your app, log in, use it — just like any other website</p>
+        <div class="card" style="text-align:center; padding:0.75rem 2.5rem; background:rgba(70,209,154,0.04); border-color:var(--green);">
+          <div style="display:flex; align-items:center; gap:0.5rem; justify-content:center;">
+            <span style="font-size:1.2rem;">👥</span>
+            <h3 style="font-size:0.95rem; margin:0;">Your Users</h3>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem;">Visit, log in, and use your app</p>
         </div>
       </div>
     </div>
 
-    <div class="card" style="margin-top:1.25rem; text-align:center; background:rgba(11,109,238,0.04); border-color:var(--blue); padding:0.75rem 1.5rem;">
-      <p style="font-size:0.95rem; margin:0;"><strong>The flow:</strong> You talk to Claude Code → it pushes code to GitHub → Vercel auto-deploys → your app is live. That's it.</p>
+    <div class="card" style="margin-top:0.75rem; text-align:center; background:rgba(11,109,238,0.04); border-color:var(--blue); padding:0.6rem 1.5rem;">
+      <p style="font-size:0.9rem; margin:0;"><strong>The flow:</strong> You talk to Claude Code → it pushes code to GitHub → Vercel auto-deploys → your app is live. That's it.</p>
     </div>
   </div>
   <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>13 / 37</span></div>
