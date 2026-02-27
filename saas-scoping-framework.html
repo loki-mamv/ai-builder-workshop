@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SaaS Scoping Framework — AI Builder Workshop</title>
+  <style>
+    /* ===== RESET ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ===== VARIABLES ===== */
+    :root {
+      --cream:       #fafdf6;
+      --navy:        #1a1a2e;
+      --navy-mid:    #2d2d4e;
+      --green-dark:  #4a8c3f;
+      --green-mid:   #88c070;
+      --green-light: #c0d4a8;
+      --green-bg:    #eef4e4;
+      --pixel-shadow: 8px 8px 0 rgba(0,0,0,0.45);
+      --btn-shadow:   4px 4px 0 #888;
+      --mono: 'Courier New', Courier, monospace;
+    }
+
+    /* ===== BASE ===== */
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--mono);
+      background-color: var(--cream);
+      color: var(--navy);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ===== SCANLINE OVERLAY (subtle) ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.018) 3px,
+        rgba(0,0,0,0.018) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 4px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--green-dark), var(--green-mid));
+      z-index: 10000;
+      transition: width 0.2s linear;
+    }
+
+    /* ===== HEADER ===== */
+    .site-header {
+      background: var(--navy);
+      color: var(--cream);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 4px solid var(--green-dark);
+    }
+
+    .site-header .logo {
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--green-mid);
+    }
+
+    .site-header .logo span {
+      color: var(--cream);
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .header-nav a {
+      color: var(--green-light);
+      text-decoration: none;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .header-nav a:hover { color: var(--green-mid); }
+
+    .header-badge {
+      background: var(--green-dark);
+      color: var(--cream);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border: 2px solid var(--green-mid);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: var(--navy);
+      color: var(--cream);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 6px solid var(--green-dark);
+    }
+
+    /* pixel grid overlay on hero */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(136,192,112,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(136,192,112,0.06) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; }
+
+    .hero-eyebrow {
+      display: inline-block;
+      background: var(--green-dark);
+      color: var(--cream);
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      margin-bottom: 1.5rem;
+      border: 2px solid var(--green-mid);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      color: var(--cream);
+      text-shadow: 4px 4px 0 var(--green-dark);
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--green-mid);
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--green-light);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-pills {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .pill {
+      background: rgba(74,140,63,0.25);
+      border: 1px solid var(--green-mid);
+      color: var(--green-mid);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+    }
+
+    .hero-phases {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .phase-chip {
+      background: var(--navy-mid);
+      border: 2px solid var(--green-dark);
+      color: var(--green-mid);
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+
+    .phase-chip:hover {
+      background: var(--green-dark);
+      color: var(--cream);
+      transform: translate(-2px, -2px);
+      box-shadow: 2px 2px 0 var(--green-mid);
+    }
+
+    /* ===== MAIN LAYOUT ===== */
+    .page-wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* ===== SECTION DIVIDER ===== */
+    .section-divider {
+      border: none;
+      border-top: 2px dashed var(--green-light);
+      margin: 3.5rem 0;
+    }
+
+    /* ===== SECTION LABEL ===== */
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      border-top: 1px solid var(--green-light);
+      max-width: 60px;
+    }
+
+    /* ===== OVERVIEW SECTION ===== */
+    .overview-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 700px) { .overview-block { grid-template-columns: 1fr; } }
+
+    /* ===== GAMEBOY FRAME ===== */
+    .gameboy-frame {
+      background: var(--cream);
+      border: 6px solid var(--navy);
+      box-shadow: var(--pixel-shadow);
+      padding: 1.75rem 1.75rem 1.5rem;
+      position: relative;
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .gameboy-frame.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .gameboy-frame:hover {
+      box-shadow: 10px 10px 0 rgba(0,0,0,0.5);
+      transform: translate(-2px, -2px);
+    }
+
+    .gameboy-frame.green-tint {
+      background: var(--green-bg);
+      border-color: var(--green-dark);
+      box-shadow: 8px 8px 0 rgba(74,140,63,0.3);
+    }
+
+    .gameboy-frame.green-tint:hover {
+      box-shadow: 10px 10px 0 rgba(74,140,63,0.4);
+    }
+
+    .frame-title {
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      border-bottom: 2px solid var(--green-light);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* ===== PHASE SECTIONS ===== */
+    .phase-section {
+      margin-bottom: 4rem;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .phase-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1rem;
+      border-bottom: 3px solid var(--navy);
+    }
+
+    .phase-badge {
+      background: var(--navy);
+      color: var(--green-mid);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0.4rem 0.8rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 0.4rem;
+      border: 2px solid var(--green-dark);
+    }
+
+    .phase-header h2 {
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--navy);
+      line-height: 1.25;
+    }
+
+    .phase-header h2 small {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--green-dark);
+      letter-spacing: 2px;
+      margin-top: 0.2rem;
+      font-weight: normal;
+    }
+
+    /* ===== SUBSECTION HEADERS ===== */
+    .sub-header {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin: 1.5rem 0 0.75rem;
+      padding-left: 0.75rem;
+      border-left: 4px solid var(--green-dark);
+    }
+
+    /* ===== PIXEL LISTS ===== */
+    .pixel-list {
+      list-style: none;
+      margin: 0.5rem 0 1rem;
+    }
+
+    .pixel-list li {
+      padding: 0.35rem 0 0.35rem 1.5rem;
+      position: relative;
+      font-size: 0.9rem;
+      color: #333;
+      border-bottom: 1px dashed var(--green-light);
+    }
+
+    .pixel-list li:last-child { border-bottom: none; }
+
+    .pixel-list li::before {
+      content: '▶';
+      position: absolute;
+      left: 0;
+      color: var(--green-dark);
+      font-size: 0.7rem;
+      top: 0.45rem;
+    }
+
+    .pixel-list li strong { color: var(--navy); }
+
+    /* ===== NUMBERED PIXEL LIST ===== */
+    .numbered-list {
+      list-style: none;
+      counter-reset: item;
+      margin: 0.5rem 0 1rem;
+    }
+
+    .numbered-list li {
+      counter-increment: item;
+      padding: 0.5rem 0 0.5rem 2.5rem;
+      position: relative;
+      font-size: 0.9rem;
+      color: #333;
+      border-bottom: 1px dashed var(--green-light);
+    }
+
+    .numbered-list li:last-child { border-bottom: none; }
+
+    .numbered-list li::before {
+      content: counter(item, decimal-leading-zero);
+      position: absolute;
+      left: 0;
+      background: var(--navy);
+      color: var(--green-mid);
+      font-size: 0.65rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      padding: 0.15rem 0.35rem;
+      min-width: 1.8rem;
+      text-align: center;
+      top: 0.5rem;
+    }
+
+    .numbered-list li strong { color: var(--navy); }
+
+    /* ===== CARDS GRID ===== */
+    .cards-grid {
+      display: grid;
+      gap: 1.25rem;
+      margin: 1rem 0;
+    }
+
+    .cards-grid-2 { grid-template-columns: 1fr 1fr; }
+    .cards-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    @media (max-width: 768px) {
+      .cards-grid-2, .cards-grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .card-item {
+      background: var(--green-bg);
+      border: 3px solid var(--navy);
+      padding: 1.25rem;
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+      transition: all 0.15s;
+    }
+
+    .card-item:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.25);
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-item h4 {
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-item p {
+      font-size: 0.85rem;
+      color: #444;
+      line-height: 1.6;
+    }
+
+    /* Warning cards */
+    .card-item.warning {
+      background: #fff8e8;
+      border-color: #c08a00;
+      box-shadow: 4px 4px 0 rgba(192,138,0,0.3);
+    }
+
+    .card-item.warning h4 { color: #7a5500; }
+
+    .card-item.warning::before {
+      content: '⚠';
+      display: block;
+      font-size: 1.25rem;
+      margin-bottom: 0.4rem;
+    }
+
+    /* ===== CODE BLOCKS ===== */
+    .code-block {
+      background: var(--navy);
+      color: var(--green-mid);
+      border: 3px solid var(--green-dark);
+      border-radius: 0;
+      padding: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      line-height: 1.7;
+      overflow-x: auto;
+      margin: 1rem 0;
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.4);
+      position: relative;
+    }
+
+    .code-block .code-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      background: var(--green-dark);
+      padding: 0.25rem 0.75rem;
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .code-block .code-bar::before {
+      content: '█ █ █';
+      letter-spacing: 1px;
+      color: var(--green-mid);
+    }
+
+    .code-block pre {
+      margin-top: 1.25rem;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .code-block .kw  { color: #88c070; }
+    .code-block .cm  { color: #5a7a4a; font-style: italic; }
+    .code-block .str { color: #c0d4a8; }
+
+    /* ===== PERMISSION TABLE ===== */
+    .pixel-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      margin: 1rem 0;
+    }
+
+    .pixel-table th {
+      background: var(--navy);
+      color: var(--green-mid);
+      padding: 0.6rem 1rem;
+      text-align: left;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      border: 2px solid var(--green-dark);
+    }
+
+    .pixel-table td {
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--green-light);
+      color: #333;
+    }
+
+    .pixel-table tbody tr:nth-child(odd) { background: var(--green-bg); }
+    .pixel-table tbody tr:nth-child(even) { background: var(--cream); }
+
+    .pixel-table .yes { color: var(--green-dark); font-weight: bold; }
+    .pixel-table .no  { color: #aaa; }
+
+    /* ===== OUTPUT TEMPLATE ===== */
+    .template-section {
+      margin: 4rem 0;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .template-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .template-frame {
+      background: var(--navy);
+      border: 6px solid var(--green-dark);
+      box-shadow: 10px 10px 0 rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    .template-header {
+      background: var(--green-dark);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .template-header span {
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cream);
+    }
+
+    .template-header .dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .template-header .dot {
+      width: 10px; height: 10px;
+      background: var(--green-mid);
+      border: 1px solid var(--cream);
+    }
+
+    .template-body {
+      padding: 2rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: var(--green-mid);
+      overflow-x: auto;
+    }
+
+    .template-body .tl-heading { color: var(--cream); font-weight: bold; }
+    .template-body .tl-key    { color: var(--green-light); }
+    .template-body .tl-val    { color: var(--green-mid); }
+    .template-body .tl-comment{ color: #4a6a3a; font-style: italic; }
+
+    /* ===== NEXT STEPS ===== */
+    .steps-list {
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .steps-list li {
+      counter-increment: step;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 2px dashed var(--green-light);
+    }
+
+    .steps-list li:last-child { border-bottom: none; }
+
+    .steps-list li::before {
+      content: counter(step);
+      background: var(--navy);
+      color: var(--green-mid);
+      font-size: 1rem;
+      font-weight: bold;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 3px solid var(--green-dark);
+      box-shadow: 3px 3px 0 var(--green-dark);
+    }
+
+    .steps-list li .step-content strong {
+      display: block;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 0.25rem;
+    }
+
+    .steps-list li .step-content span {
+      font-size: 0.82rem;
+      color: #555;
+    }
+
+    /* ===== PHASE INDEX SIDEBAR ===== */
+    .phase-index {
+      background: var(--green-bg);
+      border: 3px solid var(--green-light);
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .phase-index-label {
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green-dark);
+      width: 100%;
+      margin-bottom: 0.25rem;
+    }
+
+    .phase-idx-btn {
+      background: var(--navy);
+      color: var(--green-mid);
+      border: 2px solid var(--green-dark);
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.15s;
+      box-shadow: 3px 3px 0 #888;
+    }
+
+    .phase-idx-btn:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 #888;
+      background: var(--green-dark);
+    }
+
+    /* ===== CTA DOWNLOAD ===== */
+    .download-section {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      background: var(--navy);
+      border: 6px solid var(--green-dark);
+      box-shadow: var(--pixel-shadow);
+      margin: 3rem 0;
+    }
+
+    .download-section h3 {
+      font-size: 1.2rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--green-mid);
+      margin-bottom: 0.75rem;
+    }
+
+    .download-section p {
+      color: var(--green-light);
+      font-size: 0.85rem;
+      margin-bottom: 2rem;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-download {
+      display: inline-block;
+      background: var(--green-dark);
+      color: var(--cream);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 1rem 2.5rem;
+      border: 3px solid var(--green-mid);
+      cursor: pointer;
+      box-shadow: var(--btn-shadow);
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .btn-download:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #888;
+      background: var(--navy-mid);
+      border-color: var(--green-mid);
+    }
+
+    .btn-download:active {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+
+    /* ===== FOOTER ===== */
+    .site-footer {
+      background: var(--navy);
+      color: var(--green-light);
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-top: 4px solid var(--green-dark);
+    }
+
+    .site-footer a { color: var(--green-mid); text-decoration: none; }
+
+    /* ===== UTILITIES ===== */
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 480px) {
+      .site-header .header-nav { display: none; }
+      .hero { padding: 3rem 1rem 2.5rem; }
+      .hero h1 { font-size: 1.8rem; }
+      .phase-chips { flex-direction: column; align-items: center; }
+      .page-wrap { padding: 2rem 1rem 4rem; }
+      .code-block { font-size: 0.73rem; }
+    }
+
+    /* ===== ANIMATION TRIGGER ===== */
+    .anim-target {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .anim-target.visible { opacity: 1; transform: translateY(0); }
+
+    /* stagger children */
+    .stagger-children > * {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .stagger-children.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay: 0.05s; }
+    .stagger-children.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay: 0.12s; }
+    .stagger-children.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay: 0.19s; }
+    .stagger-children.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay: 0.26s; }
+    .stagger-children.visible > *:nth-child(5) { opacity:1; transform:none; transition-delay: 0.33s; }
+    .stagger-children.visible > *:nth-child(6) { opacity:1; transform:none; transition-delay: 0.40s; }
+
+    /* user journey example */
+    .journey-box {
+      background: var(--navy);
+      border: 3px solid var(--green-dark);
+      padding: 1.25rem;
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: var(--green-mid);
+      box-shadow: 5px 5px 0 rgba(0,0,0,0.35);
+      margin-top: 0.75rem;
+    }
+
+    .journey-box .jb-title {
+      color: var(--green-light);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid var(--green-dark);
+      padding-bottom: 0.25rem;
+    }
+
+    .journey-box ol {
+      list-style: none;
+      counter-reset: jstep;
+      margin: 0;
+    }
+
+    .journey-box ol li {
+      counter-increment: jstep;
+      padding-left: 1.75rem;
+      position: relative;
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+    }
+
+    .journey-box ol li::before {
+      content: counter(jstep) '.';
+      position: absolute;
+      left: 0;
+      color: var(--green-light);
+    }
+
+    /* phase timeline connector */
+    .phases-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .phases-timeline::before {
+      content: '';
+      position: absolute;
+      left: 1.1rem;
+      top: 1.5rem;
+      bottom: 1.5rem;
+      width: 3px;
+      background: repeating-linear-gradient(
+        180deg,
+        var(--green-dark) 0, var(--green-dark) 8px,
+        transparent 8px, transparent 14px
+      );
+    }
+  </style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"></div>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="logo">▶ <span>AI Builder</span> Workshop</div>
+  <nav>
+    <ul class="header-nav">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#phase-1">Phases</a></li>
+      <li><a href="#template">Template</a></li>
+      <li><a href="#practices">Practices</a></li>
+      <li><a href="#download">Download</a></li>
+    </ul>
+  </nav>
+  <div class="header-badge">Free Resource</div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">▶ AI Builder Workshop — Resource Kit</div>
+    <h1>SaaS <em>Scoping</em><br>Framework</h1>
+    <p class="hero-sub">
+      A systematic, 7-phase planning guide for non-technical founders.
+      Define your app clearly before a single line of code is written.
+    </p>
+    <div class="hero-pills">
+      <span class="pill">7 Phases</span>
+      <span class="pill">Claude Code Ready</span>
+      <span class="pill">Non-Technical Friendly</span>
+      <span class="pill">Free Resource</span>
+    </div>
+    <div class="hero-phases">
+      <a class="phase-chip" href="#phase-1">01 Features</a>
+      <a class="phase-chip" href="#phase-2">02 Technical</a>
+      <a class="phase-chip" href="#phase-3">03 UX Design</a>
+      <a class="phase-chip" href="#phase-4">04 Business</a>
+      <a class="phase-chip" href="#phase-5">05 Metrics</a>
+      <a class="phase-chip" href="#phase-6">06 Risk</a>
+      <a class="phase-chip" href="#phase-7">07 Development</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="page-wrap">
+
+  <!-- PHASE INDEX -->
+  <div class="phase-index anim-target">
+    <div class="phase-index-label">▶ Jump to Phase</div>
+    <a class="phase-idx-btn" href="#phase-1">01 — Features</a>
+    <a class="phase-idx-btn" href="#phase-2">02 — Technical</a>
+    <a class="phase-idx-btn" href="#phase-3">03 — UX Design</a>
+    <a class="phase-idx-btn" href="#phase-4">04 — Business</a>
+    <a class="phase-idx-btn" href="#phase-5">05 — Metrics</a>
+    <a class="phase-idx-btn" href="#phase-6">06 — Risk</a>
+    <a class="phase-idx-btn" href="#phase-7">07 — Dev Plan</a>
+    <a class="phase-idx-btn" href="#template">Output Template</a>
+  </div>
+
+  <!-- ===== OVERVIEW ===== -->
+  <section id="overview" class="anim-target">
+    <div class="section-label">▶ Overview</div>
+    <div class="overview-block">
+      <div class="gameboy-frame">
+        <div class="frame-title">▶ What This Is</div>
+        <p style="font-size:0.9rem;color:#333;line-height:1.7;">
+          This framework helps non-technical founders systematically plan SaaS
+          applications <strong>before development begins</strong>. By working through
+          each phase, you create clear, actionable instructions that Claude Code
+          can execute effectively — no guesswork required.
+        </p>
+      </div>
+      <div class="gameboy-frame green-tint">
+        <div class="frame-title">▶ How to Use It</div>
+        <ul class="pixel-list">
+          <li>Work through all <strong>7 phases</strong> in order</li>
+          <li>Fill in your specifics as you go</li>
+          <li>Use the <strong>Output Template</strong> at the end</li>
+          <li>Hand the brief to Claude Code and build</li>
+          <li>Iterate based on real feedback</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== PHASE 1 ===== -->
+  <section id="phase-1" class="phase-section">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 01</div>
+      <h2>
+        Feature Planning &amp; Prioritization
+        <small>Define what you're building and in what order</small>
+      </h2>
+    </div>
+
+    <!-- 1.1 Core Features -->
+    <div class="gameboy-frame">
+      <div class="frame-title">1.1 — Core Features (MVP)</div>
+      <p style="font-size:0.85rem;color:#444;margin-bottom:1rem;">
+        List only the <strong>absolute essential</strong> features needed to solve the core problem.
+        For each one, define what it does, why it's essential, and how you'll know it's working.
+      </p>
+      <div class="code-block">
+        <div class="code-bar">Feature Template</div>
+        <pre>
+Feature: [Feature Name]
+├── What it does:      [Plain-language description]
+├── Why essential:     [Core problem it solves]
+└── Success criteria:  [Measurable "done" state]
+        </pre>
+      </div>
+      <ul class="pixel-list mt-2">
+        <li>Keep MVP to <strong>3–5 features maximum</strong></li>
+        <li>If removing it doesn't break the core loop, it's not MVP</li>
+        <li>Every feature must have a measurable success criterion</li>
+      </ul>
+    </div>
+
+    <!-- 1.2 User Journey -->
+    <div class="gameboy-frame green-tint">
+      <div class="frame-title">1.2 — User Journey Mapping</div>
+      <p style="font-size:0.85rem;color:#444;margin-bottom:0.75rem;">
+        For each core feature, map the exact steps a user takes from start to finish.
+        Be sequential and specific — Claude Code will use these to build the flow.
+      </p>
+      <div class="journey-box">
+        <div class="jb-title">▶ Example — User Registration Flow</div>
+        <ol>
+          <li>User clicks "Sign Up"</li>
+          <li>User enters email and password</li>
+          <li>System sends verification email</li>
+          <li>User clicks verification link</li>
+          <li>User is redirected to onboarding</li>
+          <li>User sees dashboard for first time</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- 1.3 Future Features -->
+    <div class="gameboy-frame">
+      <div class="frame-title">1.3 — Future Features (Post-MVP Roadmap)</div>
+      <div class="cards-grid cards-grid-3 stagger-children">
+        <div class="card-item">
+          <div class="card-icon">🌱</div>
+          <h4>Phase 2</h4>
+          <p>Nice-to-have features that enhance the core experience after initial validation.</p>
+        </div>
+        <div class="card-item">
+          <div class="card-icon">📈</div>
+          <h4>Phase 3</h4>
+          <p>Growth features — retention loops, sharing, collaboration, advanced analytics.</p>
+        </div>
+        <div class="card-item">
+          <div class="card-icon">🚀</div>
+          <h4>Someday</h4>
+          <p>Vision features. Log them here so they don't creep into MVP but aren't forgotten.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== PHASE 2 ===== -->
+  <section id="phase-2" class="phase-section">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 02</div>
+      <h2>
+        Technical Requirements &amp; Constraints
+        <small>Data, users, integrations, and performance needs</small>
+      </h2>
+    </div>
+
+    <div class="overview-block">
+      <!-- 2.1 Data -->
+      <div class="gameboy-frame">
+        <div class="frame-title">2.1 — Data &amp; Storage</div>
+        <div class="sub-header">What data will you store?</div>
+        <ul class="pixel-list">
+          <li><strong>User data</strong> — profiles, preferences, history</li>
+          <li><strong>Application data</strong> — your core business objects</li>
+          <li><strong>Files / media</strong> — uploads, attachments, assets</li>
+        </ul>
+        <div class="sub-header">Data relationships</div>
+        <ul class="pixel-list">
+          <li>How do different data types connect?</li>
+          <li>What records need to be linked together?</li>
+          <li>Parent/child relationships between objects?</li>
+        </ul>
+      </div>
+
+      <!-- 2.2 Permissions -->
+      <div class="gameboy-frame green-tint">
+        <div class="frame-title">2.2 — User Access &amp; Permissions</div>
+        <div class="sub-header">Common User Types</div>
+        <ul class="pixel-list">
+          <li><strong>Admin</strong> — full control</li>
+          <li><strong>Regular User</strong> — standard access</li>
+          <li><strong>Guest</strong> — read-only or limited</li>
+          <li><strong>Custom Roles</strong> — define for your use case</li>
+        </ul>
+        <div class="sub-header">Permissions Matrix Template</div>
+        <table class="pixel-table" style="margin-top:0.5rem;">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Admin</th>
+              <th>User</th>
+              <th>Guest</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>View records</td>
+              <td class="yes">Yes</td>
+              <td class="yes">Yes</td>
+              <td class="no">No</td>
+            </tr>
+            <tr>
+              <td>Edit records</td>
+              <td class="yes">Yes</td>
+              <td class="no">No</td>
+              <td class="no">No</td>
+            </tr>
+            <tr>
+              <td>Delete records</td>
+              <td class="yes">Yes</td>
+              <td class="no">No</td>
+              <td class="no">No</td>
+            </tr>
+            <tr>
+              <td>Manage users</td>
+              <td class="yes">Yes</td>
+              <td class="no">No</td>
+              <td class="no">No</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2.3 Integrations -->
+    <div class="gameboy-frame">
+      <div class="frame-title">2.3 — Integration Requirements</div>
+      <div class="cards-grid cards-grid-3 stagger-children">
+        <div class="card-item">
+          <div class="card-icon">💳</div>
+          <h4>Payments</h4>
+          <p>Stripe or PayPal? Subscriptions vs. one-time? What currencies?</p>
+        </div>
+        <div class="card-item">
+          <div class="card-icon">📧</div>
+          <h4>Email</h4>
+          <p>SendGrid, Postmark, or Resend? Transactional only or marketing too?</p>
+        </div>
+        <div class="card-item">
+          <div class="card-icon">📊</div>
+          <h4>Analytics</h4>
+          <p>Google Analytics, Mixpanel, or Posthog? What events matter most?</p>
+        </div>
+        <div class="card-item">
+          <div class="card-icon">🗂️</div>
+          <h4>Storage</h4>
+          <p>AWS S3 or Cloudinary? File types and size limits?</p>
+        </div>
+        <div class="card-item">
+          <div class="card-icon">🔌</div>
+          <h4>External APIs</h4>
+          <p>Will you consume third-party APIs? Or expose your own?</p>
+        </div>
+        <div class="card-item">
+          <div class="card-icon">🤝</div>
+          <h4>Webhooks</h4>
+          <p>Real-time events, notifications, Slack/Teams integrations?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.4 Performance -->
+    <div class="gameboy-frame green-tint">
+      <div class="frame-title">2.4 — Performance &amp; Scale</div>
+      <div class="overview-block">
+        <div>
+          <div class="sub-header">Expected Usage</div>
+          <ul class="pixel-list">
+            <li>Users at launch: ___</li>
+            <li>Users at 6 months: ___</li>
+            <li>Users at 1 year: ___</li>
+            <li>Peak concurrent users: ___</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sub-header">Response Time Requirements</div>
+          <ul class="pixel-list">
+            <li>Page load target: ___ seconds</li>
+            <li>Critical operations: ___ ms</li>
+            <li>File upload/download: acceptable range</li>
+            <li>Real-time requirements? (chat, live data)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== PHASE 3 ===== -->
+  <section id="phase-3" class="phase-section">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 03</div>
+      <h2>
+        User Experience Design
+        <small>Interface principles, information architecture, key screens</small>
+      </h2>
+    </div>
+
+    <div class="overview-block">
+      <!-- 3.1 Design Style -->
+      <div class="gameboy-frame">
+        <div class="frame-title">3.1 — Interface Principles</div>
+        <div class="sub-header">Design Style</div>
+        <ul class="pixel-list">
+          <li><strong>Modern/Minimal</strong> — clean, lots of whitespace</li>
+          <li><strong>Professional/Corporate</strong> — structured, data-dense</li>
+          <li><strong>Friendly/Casual</strong> — colorful, approachable</li>
+          <li><strong>Technical/Dev-focused</strong> — dark mode, code-adjacent</li>
+        </ul>
+        <div class="sub-header">Key UI Decisions</div>
+        <ul class="pixel-list">
+          <li>Navigation: sidebar vs. top nav vs. bottom tabs</li>
+          <li>Mobile-first or desktop-first?</li>
+          <li>Accessibility requirements (WCAG level?)</li>
+          <li>Dark mode support needed?</li>
+        </ul>
+      </div>
+
+      <!-- 3.2 IA -->
+      <div class="gameboy-frame green-tint">
+        <div class="frame-title">3.2 — Information Architecture</div>
+        <div class="sub-header">Navigation Hierarchy</div>
+        <div class="code-block" style="margin-top:0.5rem;">
+          <div class="code-bar">Site Map Template</div>
+          <pre>
+Home
+├── Dashboard
+├── [Core Feature 1]
+│   ├── List View
+│   ├── Detail View
+│   └── Create/Edit
+├── [Core Feature 2]
+│   └── ...
+├── Settings
+│   ├── Account
+│   ├── Billing
+│   └── Team
+└── Help
+          </pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3.3 Key Screens -->
+    <div class="gameboy-frame">
+      <div class="frame-title">3.3 — Key Pages / Screens</div>
+      <p style="font-size:0.85rem;color:#444;margin-bottom:1rem;">
+        For each major screen, define its purpose, what data it shows, what actions a user can take,
+        and how you'll know it's working well.
+      </p>
+      <table class="pixel-table">
+        <thead>
+          <tr>
+            <th>Screen</th>
+            <th>Purpose</th>
+            <th>Key Actions</th>
+            <th>Success Metric</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Dashboard</strong></td>
+            <td>Overview of activity</td>
+            <td>Quick-add, navigate</td>
+            <td>User completes task in &lt;30s</td>
+          </tr>
+          <tr>
+            <td><strong>[Feature] List</strong></td>
+            <td>Browse all records</td>
+            <td>Filter, sort, open</td>
+            <td>Finds record in &lt;3 clicks</td>
+          </tr>
+          <tr>
+            <td><strong>Settings</strong></td>
+            <td>Account management</td>
+            <td>Update info, billing</td>
+            <td>Self-serve without support</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== PHASE 4 ===== -->
+  <section id="phase-4" class="phase-section">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 04</div>
+      <h2>
+        Business Model &amp; Monetization
+        <small>Pricing strategy, billing, and payment setup</small>
+      </h2>
+    </div>
+
+    <div class="overview-block">
+      <!-- 4.1 Pricing -->
+      <div class="gameboy-frame">
+        <div class="frame-title">4.1 — Pricing Strategy</div>
+        <div class="sub-header">Model Type</div>
+        <ul class="pixel-list">
+          <li><strong>Subscription</strong> — monthly or annual recurring</li>
+          <li><strong>One-time purchase</strong> — single payment, lifetime</li>
+          <li><strong>Freemium</strong> — free tier with paid upgrades</li>
+          <li><strong>Usage-based</strong> — pay per API call, seat, action</li>
+        </ul>
+        <div class="sub-header">Pricing Tiers Template</div>
+        <table class="pixel-table">
+          <thead>
+            <tr><th>Tier</th><th>Price</th><th>Key Limits</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Free/Trial</strong></td><td>$0</td><td>X users, Y features</td></tr>
+            <tr><td><strong>Basic</strong></td><td>$X/mo</td><td>More of everything</td></tr>
+            <tr><td><strong>Pro</strong></td><td>$X/mo</td><td>Full feature set</td></tr>
+            <tr><td><strong>Enterprise</strong></td><td>Custom</td><td>White-glove, SLA</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 4.2 Billing -->
+      <div class="gameboy-frame green-tint">
+        <div class="frame-title">4.2 — Payment &amp; Billing Details</div>
+        <div class="sub-header">Payment Methods</div>
+        <ul class="pixel-list">
+          <li>Credit / debit card (Stripe)</li>
+          <li>PayPal (adds complexity — worth it?)</li>
+          <li>Invoice / net-30 for enterprise</li>
+        </ul>
+        <div class="sub-header">Billing Features to Define</div>
+        <ul class="pixel-list">
+          <li><strong>Trial period</strong> — how many days?</li>
+          <li><strong>Upgrade path</strong> — immediate or next cycle?</li>
+          <li><strong>Downgrade rules</strong> — what happens to data?</li>
+          <li><strong>Refund policy</strong> — 30-day? Pro-rated?</li>
+          <li><strong>Seat-based vs. flat</strong> — per user or per account?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== PHASE 5 ===== -->
+  <section id="phase-5" class="phase-section">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 05</div>
+      <h2>
+        Success Metrics &amp; Analytics
+        <small>KPIs, tracking plan, and data-driven decisions</small>
+      </h2>
+    </div>
+
+    <div class="overview-block">
+      <!-- 5.1 KPIs -->
+      <div class="gameboy-frame">
+        <div class="frame-title">5.1 — Key Performance Indicators</div>
+        <div class="sub-header">User Metrics</div>
+        <ul class="pixel-list">
+          <li><strong>Sign-ups</strong> — weekly/monthly new accounts</li>
+          <li><strong>Activation rate</strong> — % who complete key action</li>
+          <li><strong>DAU / MAU</strong> — daily vs. monthly active ratio</li>
+          <li><strong>Churn rate</strong> — % who cancel per month</li>
+        </ul>
+        <div class="sub-header">Business Metrics</div>
+        <ul class="pixel-list">
+          <li><strong>MRR</strong> — Monthly Recurring Revenue</li>
+          <li><strong>LTV</strong> — Customer Lifetime Value</li>
+          <li><strong>CAC</strong> — Customer Acquisition Cost</li>
+          <li><strong>LTV:CAC ratio</strong> — target 3:1 minimum</li>
+        </ul>
+      </div>
+
+      <!-- 5.2 Analytics -->
+      <div class="gameboy-frame green-tint">
+        <div class="frame-title">5.2 — Analytics Implementation</div>
+        <div class="sub-header">Events to Track</div>
+        <ul class="pixel-list">
+          <li>User signed up / verified</li>
+          <li>Core feature used (first time)</li>
+          <li>Core feature used (repeat)</li>
+          <li>Upgrade initiated / completed</li>
+          <li>Error encountered (type + frequency)</li>
+          <li>Session length and depth</li>
+        </ul>
+        <div class="sub-header">Performance Metrics</div>
+        <ul class="pixel-list">
+          <li>Page load times by route</li>
+          <li>API error rates</li>
+          <li>Database query performance</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== PHASE 6 ===== -->
+  <section id="phase-6" class="phase-section">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 06</div>
+      <h2>
+        Risk Assessment &amp; Mitigation
+        <small>Identify what could go wrong and plan for it</small>
+      </h2>
+    </div>
+
+    <div class="overview-block">
+      <div class="gameboy-frame">
+        <div class="frame-title">6.1 — Technical Risks</div>
+        <ul class="pixel-list">
+          <li>
+            <strong>Data loss</strong>
+            → Automated backups, point-in-time recovery
+          </li>
+          <li>
+            <strong>Security breach</strong>
+            → Auth best practices, input sanitization, rate limiting
+          </li>
+          <li>
+            <strong>Downtime</strong>
+            → Uptime monitoring, alerting, status page
+          </li>
+          <li>
+            <strong>Scaling bottlenecks</strong>
+            → DB indexing, caching strategy, horizontal scaling plan
+          </li>
+          <li>
+            <strong>Third-party failures</strong>
+            → Fallbacks for payment, email, storage providers
+          </li>
+        </ul>
+      </div>
+
+      <div class="gameboy-frame green-tint">
+        <div class="frame-title">6.2 — Business Risks</div>
+        <ul class="pixel-list">
+          <li>
+            <strong>Low adoption</strong>
+            → Pre-launch waitlist, beta program, early feedback loops
+          </li>
+          <li>
+            <strong>High churn</strong>
+            → In-app feedback, exit surveys, engagement monitoring
+          </li>
+          <li>
+            <strong>Competition</strong>
+            → Clear differentiation, niche focus, switching costs
+          </li>
+          <li>
+            <strong>Regulatory / compliance</strong>
+            → GDPR, HIPAA, SOC 2 — know what applies to you
+          </li>
+          <li>
+            <strong>Funding / runway</strong>
+            → Revenue targets before runway runs out
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== PHASE 7 ===== -->
+  <section id="phase-7" class="phase-section">
+    <div class="phase-header">
+      <div class="phase-badge">Phase 07</div>
+      <h2>
+        Development Approach
+        <small>Tech stack decisions and build timeline</small>
+      </h2>
+    </div>
+
+    <!-- 7.1 Tech Decisions -->
+    <div class="gameboy-frame">
+      <div class="frame-title">7.1 — Technology Decisions</div>
+      <table class="pixel-table">
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Option A</th>
+            <th>Option B</th>
+            <th>Best For</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Frontend</strong></td>
+            <td>Next.js (React)</td>
+            <td>Vue / Nuxt</td>
+            <td>Next.js: default choice, great ecosystem</td>
+          </tr>
+          <tr>
+            <td><strong>Backend</strong></td>
+            <td>Node.js / Express</td>
+            <td>Python / FastAPI</td>
+            <td>Node: stays in JS, Python: AI/ML heavy</td>
+          </tr>
+          <tr>
+            <td><strong>Database</strong></td>
+            <td>PostgreSQL</td>
+            <td>MongoDB</td>
+            <td>Postgres: relational data (use Supabase)</td>
+          </tr>
+          <tr>
+            <td><strong>Auth</strong></td>
+            <td>Supabase Auth</td>
+            <td>NextAuth / Auth.js</td>
+            <td>Supabase: easiest all-in-one</td>
+          </tr>
+          <tr>
+            <td><strong>Hosting</strong></td>
+            <td>Vercel</td>
+            <td>AWS / Railway</td>
+            <td>Vercel: fastest to ship</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 7.2 Timeline -->
+    <div class="gameboy-frame green-tint">
+      <div class="frame-title">7.2 — Development Phases</div>
+      <div class="phases-timeline">
+        <ul class="numbered-list" style="margin-left:3rem;">
+          <li>
+            <strong>Core Functionality</strong> (2–4 weeks) —
+            The single feature that proves your concept. Nothing else.
+          </li>
+          <li>
+            <strong>User Management &amp; Auth</strong> (1–2 weeks) —
+            Sign up, login, password reset, email verification.
+          </li>
+          <li>
+            <strong>Payment Integration</strong> (1–2 weeks) —
+            Stripe Checkout or Billing Portal. Subscription management.
+          </li>
+          <li>
+            <strong>Polish &amp; Testing</strong> (1–2 weeks) —
+            Edge cases, error states, mobile responsiveness, load testing.
+          </li>
+          <li>
+            <strong>Beta Launch</strong> — Ship to early users. Collect feedback. Iterate.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== OUTPUT TEMPLATE ===== -->
+  <section id="template" class="template-section">
+    <div class="section-label">▶ Output Template</div>
+    <h2 style="font-size:1.4rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:0.5rem;">
+      The Claude Code Brief
+    </h2>
+    <p style="font-size:0.85rem;color:#555;margin-bottom:1.5rem;">
+      After completing all 7 phases, compile your answers into this structured brief.
+      Hand it to Claude Code at the start of your first session.
+    </p>
+
+    <div class="template-frame">
+      <div class="template-header">
+        <span>▶ Project Brief Template — Claude Code</span>
+        <div class="dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+      <div class="template-body">
+<span class="tl-heading"># Project Brief: [Your App Name]</span>
+
+<span class="tl-comment">## Executive Summary</span>
+<span class="tl-val">[2–3 sentences describing what you're building and why]</span>
+
+<span class="tl-comment">## Problem &amp; Solution</span>
+<span class="tl-key">- Problem:</span> <span class="tl-val">[Clear problem statement]</span>
+<span class="tl-key">- Solution:</span> <span class="tl-val">[How your app solves it]</span>
+<span class="tl-key">- Target Users:</span> <span class="tl-val">[Who will use this]</span>
+
+<span class="tl-comment">## Core Features (MVP)</span>
+<span class="tl-val">1. <span class="tl-heading">[Feature 1]</span>
+   - Description: [What it does]
+   - User Flow: [Step-by-step process]
+   - Success Criteria: [How we know it works]
+
+2. <span class="tl-heading">[Feature 2]</span>
+   - Description: [What it does]
+   - User Flow: [Step-by-step process]
+   - Success Criteria: [How we know it works]</span>
+
+<span class="tl-comment">## Technical Requirements</span>
+<span class="tl-key">- Database Schema:</span>
+<span class="tl-val">  - Users table: [fields]
+  - [Other tables]: [fields]</span>
+<span class="tl-key">- Authentication:</span> <span class="tl-val">[Requirements]</span>
+<span class="tl-key">- Integrations:</span> <span class="tl-val">[List external services]</span>
+<span class="tl-key">- Performance:</span> <span class="tl-val">[Key requirements]</span>
+
+<span class="tl-comment">## Design Guidelines</span>
+<span class="tl-key">- Style:</span> <span class="tl-val">[Design direction]</span>
+<span class="tl-key">- Key Pages:</span> <span class="tl-val">[List with descriptions]</span>
+<span class="tl-key">- Mobile:</span> <span class="tl-val">[Responsive requirements]</span>
+
+<span class="tl-comment">## Business Logic</span>
+<span class="tl-key">- User Roles:</span> <span class="tl-val">[Define each role]</span>
+<span class="tl-key">- Permissions:</span> <span class="tl-val">[Who can do what]</span>
+<span class="tl-key">- Pricing:</span> <span class="tl-val">[If applicable]</span>
+
+<span class="tl-comment">## Success Metrics</span>
+<span class="tl-val">- [Metric 1]: [Target value]
+- [Metric 2]: [Target value]</span>
+
+<span class="tl-comment">## Development Priorities</span>
+<span class="tl-val">1. [Most important feature/functionality]
+2. [Second priority]
+3. [Third priority]</span>
+
+<span class="tl-comment">## Constraints &amp; Considerations</span>
+<span class="tl-val">- [Any specific limitations]
+- [Important business rules]
+- [Compliance requirements]</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== BEST PRACTICES ===== -->
+  <section id="practices" class="anim-target">
+    <div class="section-label">▶ Best Practices</div>
+    <h2 style="font-size:1.3rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem;">
+      Working Effectively with Claude Code
+    </h2>
+
+    <div class="cards-grid cards-grid-3 stagger-children">
+      <div class="card-item">
+        <div class="card-icon">🌱</div>
+        <h4>01 — Start Small</h4>
+        <p>
+          Begin with the simplest version of your core feature. Test and validate
+          before adding complexity. Every feature you add is a feature to debug.
+        </p>
+      </div>
+
+      <div class="card-item">
+        <div class="card-icon">🎯</div>
+        <h4>02 — Be Specific</h4>
+        <p>
+          Use concrete examples instead of abstract descriptions. Provide sample data.
+          Include edge cases. "User-friendly" tells Claude nothing.
+        </p>
+      </div>
+
+      <div class="card-item">
+        <div class="card-icon">👤</div>
+        <h4>03 — Think in User Stories</h4>
+        <p>
+          "As a [user type], I want to [action] so that [benefit]."
+          This format gives Claude the context and purpose it needs.
+        </p>
+      </div>
+
+      <div class="card-item">
+        <div class="card-icon">🖼️</div>
+        <h4>04 — Provide Visual References</h4>
+        <p>
+          Sketch wireframes. Share screenshots of apps you like. Describe visual
+          hierarchy — left sidebar, top stats row, main content grid.
+        </p>
+      </div>
+
+      <div class="card-item">
+        <div class="card-icon">✅</div>
+        <h4>05 — Define Success Clearly</h4>
+        <p>
+          What does "working" mean for each feature? How will you test it?
+          What are the acceptance criteria? Be specific.
+        </p>
+      </div>
+
+      <div class="card-item">
+        <div class="card-icon">🔒</div>
+        <h4>06 — Communicate Constraints</h4>
+        <p>
+          Budget limits, timeline requirements, technical preferences, scaling
+          expectations. Claude will optimize for what you tell it matters.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== COMMON PITFALLS ===== -->
+  <section id="pitfalls" class="anim-target">
+    <div class="section-label">▶ Common Pitfalls</div>
+    <h2 style="font-size:1.3rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem;">
+      What to Avoid
+    </h2>
+
+    <div class="cards-grid cards-grid-3 stagger-children">
+      <div class="card-item warning">
+        <h4>Feature Creep</h4>
+        <p>Trying to build everything at once. Every added feature multiplies complexity. Ship the core, validate, then expand.</p>
+      </div>
+
+      <div class="card-item warning">
+        <h4>Vague Requirements</h4>
+        <p>"Make it user-friendly" without specifics. Claude will guess — and guessing means revision cycles. Be precise.</p>
+      </div>
+
+      <div class="card-item warning">
+        <h4>Ignoring User Feedback</h4>
+        <p>Building in isolation without showing real users. What you think they want and what they actually need often differ wildly.</p>
+      </div>
+
+      <div class="card-item warning">
+        <h4>Over-Engineering</h4>
+        <p>Complex solutions for simple problems. Your MVP doesn't need microservices, real-time sync, or AI if users just need a form.</p>
+      </div>
+
+      <div class="card-item warning">
+        <h4>Under-Specifying</h4>
+        <p>Not enough detail for Claude to execute. A thin spec leads to thin output. Garbage in, garbage out — every time.</p>
+      </div>
+
+      <div class="card-item warning">
+        <h4>Skipping the Plan</h4>
+        <p>Jumping straight to "build me an app" without this framework. 20 minutes of planning saves 20 hours of rework.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== NEXT STEPS ===== -->
+  <section id="next-steps" class="anim-target">
+    <div class="section-label">▶ Next Steps</div>
+    <h2 style="font-size:1.3rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem;">
+      Your Action Plan
+    </h2>
+
+    <div class="gameboy-frame">
+      <div class="frame-title">▶ Complete This Sequence</div>
+      <ul class="steps-list">
+        <li>
+          <div class="step-content">
+            <strong>Complete the framework</strong>
+            <span>Work through all 7 phases for your specific app idea. Download the .md file and fill in your answers.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Create the output brief</strong>
+            <span>Compile your answers into the Claude Code brief template. This becomes your first message to Claude.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Review and refine</strong>
+            <span>Sleep on it. Revisit with fresh eyes. Show it to a potential user. Remove anything that isn't truly MVP.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Start with Claude Code on the simplest feature first</strong>
+            <span>Paste the brief. Build Phase 1 only. Get something running before expanding scope.</span>
+          </div>
+        </li>
+        <li>
+          <div class="step-content">
+            <strong>Iterate and improve based on results</strong>
+            <span>Real feedback beats imagined requirements. Build → show users → learn → adjust. Repeat.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="gameboy-frame green-tint" style="margin-top:1.5rem;">
+      <div class="frame-title">▶ Remember</div>
+      <p style="font-size:0.9rem;color:#333;line-height:1.8;">
+        The clearer your vision and requirements, the better Claude Code can help you build it.
+        Time invested in planning is time saved in development.
+        <strong>A 20-minute scoping session prevents 20 hours of rework.</strong>
+      </p>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ===== DOWNLOAD ===== -->
+  <section id="download" class="anim-target">
+    <div class="download-section">
+      <h3>▶ Download the Framework</h3>
+      <p>
+        Get the raw Markdown file — fill it in directly, use it as a Claude prompt,
+        or share it with your co-founder.
+      </p>
+      <button class="btn-download" onclick="downloadMarkdown()">
+        ▼ Download saas-scoping-framework.md
+      </button>
+    </div>
+  </section>
+
+</div><!-- /page-wrap -->
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <span>▶ AI Builder Workshop — Free Resource</span> &nbsp;|&nbsp;
+  <a href="https://mamv.co/webinar">mamv.co/webinar</a> &nbsp;|&nbsp;
+  <span>Mike Maseda — MAMV Ventures</span>
+</footer>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  // ─── PROGRESS BAR ───────────────────────────────────────────────────────────
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (scrolled / total * 100) + '%';
+  });
+
+  // ─── INTERSECTION OBSERVER (FADE IN) ────────────────────────────────────────
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll(
+    '.anim-target, .phase-section, .gameboy-frame, .template-section, .stagger-children'
+  ).forEach(el => io.observe(el));
+
+  // ─── DOWNLOAD MARKDOWN ───────────────────────────────────────────────────────
+  function downloadMarkdown() {
+    const md = `# SaaS Application Scoping Framework for Claude Code
+
+## Overview
+
+This framework helps non-technical founders systematically plan SaaS applications before development. By answering these questions and following this process, you'll create clear, actionable instructions for Claude Code to build your application effectively.
+
+---
+
+## Phase 1: Feature Planning & Prioritization
+
+### 1.1 Core Features (MVP)
+
+List only the absolute essential features needed to solve the core problem:
+
+1. **Feature Name**
+   - What it does
+   - Why it's essential
+   - Success criteria
+
+2. **Feature Name**
+   - What it does
+   - Why it's essential
+   - Success criteria
+
+### 1.2 User Journey Mapping
+
+For each core feature, describe the user flow:
+
+**Example Format:**
+\`\`\`
+Feature: User Registration
+1. User clicks "Sign Up"
+2. User enters email and password
+3. System sends verification email
+4. User clicks verification link
+5. User is logged in and sees dashboard
+\`\`\`
+
+### 1.3 Future Features (Post-MVP)
+
+- Phase 2 features (nice-to-have)
+- Phase 3 features (growth features)
+- "Someday" features (vision features)
+
+---
+
+## Phase 2: Technical Requirements & Constraints
+
+### 2.1 Data & Storage
+
+- **What data will you store?**
+  - User data
+  - Application data
+  - Files/media
+
+- **Data relationships**
+  - How do different data types connect?
+  - What needs to be linked together?
+
+### 2.2 User Access & Permissions
+
+- **User Types**
+  - Admin
+  - Regular user
+  - Guest
+  - Custom roles?
+
+- **Permissions Matrix**
+
+\`\`\`
+| Feature   | Admin | User | Guest |
+|-----------|-------|------|-------|
+| View X    | Yes   | Yes  | No    |
+| Edit X    | Yes   | No   | No    |
+\`\`\`
+
+### 2.3 Integration Requirements
+
+- **External Services**
+  - Payment processing (Stripe, PayPal?)
+  - Email service (SendGrid, Postmark?)
+  - Analytics (Google Analytics, Mixpanel?)
+  - Storage (AWS S3, Cloudinary?)
+
+- **API Needs**
+  - Will others need to access your data?
+  - Do you need to connect to other tools?
+
+### 2.4 Performance & Scale
+
+- **Expected Usage**
+  - Number of users (launch, 6 months, 1 year)
+  - Concurrent users
+  - Data volume
+
+- **Response Time Requirements**
+  - Page load expectations
+  - Critical operations that must be fast
+
+---
+
+## Phase 3: User Experience Design
+
+### 3.1 Interface Principles
+
+- **Design Style**
+  - Modern/minimal
+  - Professional/corporate
+  - Friendly/casual
+  - Technical/developer-focused
+
+- **Key UI Elements**
+  - Navigation style (sidebar, top nav, etc.)
+  - Mobile responsiveness priority
+  - Accessibility requirements
+
+### 3.2 Information Architecture
+
+- **Main Sections**
+  - Dashboard
+  - Settings
+  - User management
+  - [Your specific sections]
+
+- **Navigation Hierarchy**
+
+\`\`\`
+Home
+├── Dashboard
+├── Feature 1
+│   ├── Sub-feature A
+│   └── Sub-feature B
+└── Settings
+\`\`\`
+
+### 3.3 Key Pages/Screens
+
+For each major screen, describe:
+- Purpose
+- Key information displayed
+- Main actions available
+- Success metrics
+
+---
+
+## Phase 4: Business Model & Monetization
+
+### 4.1 Pricing Strategy
+
+- **Model Type**
+  - Subscription (monthly/annual)
+  - One-time purchase
+  - Freemium
+  - Usage-based
+
+- **Pricing Tiers**
+  - Free/Trial: [features]
+  - Basic: $X/month [features]
+  - Pro: $X/month [features]
+  - Enterprise: Custom [features]
+
+### 4.2 Payment & Billing
+
+- **Payment Methods**
+  - Credit card
+  - PayPal
+  - Invoice
+
+- **Billing Features**
+  - Trial period length
+  - Upgrade/downgrade rules
+  - Refund policy
+
+---
+
+## Phase 5: Success Metrics & Analytics
+
+### 5.1 Key Performance Indicators (KPIs)
+
+- **User Metrics**
+  - Sign-ups
+  - Active users
+  - Churn rate
+
+- **Business Metrics**
+  - MRR (Monthly Recurring Revenue)
+  - Customer Lifetime Value
+  - Customer Acquisition Cost
+
+### 5.2 Analytics Implementation
+
+- **What to Track**
+  - User actions
+  - Feature usage
+  - Error rates
+  - Performance metrics
+
+---
+
+## Phase 6: Risk Assessment & Mitigation
+
+### 6.1 Technical Risks
+
+- Data loss → Backup strategy
+- Security breaches → Security measures
+- Downtime → Monitoring and alerts
+- Scaling issues → Architecture planning
+
+### 6.2 Business Risks
+
+- Low adoption → Marketing strategy
+- High churn → User feedback loops
+- Competition → Differentiation strategy
+
+---
+
+## Phase 7: Development Approach
+
+### 7.1 Technology Decisions
+
+- **Frontend Framework**: React, Vue, or Next.js?
+- **Backend**: Node.js, Python, or full-stack framework?
+- **Database**: PostgreSQL, MySQL, or MongoDB?
+- **Hosting**: Vercel, AWS, or Heroku?
+
+### 7.2 Development Phases
+
+1. **Phase 1**: Core functionality (2-4 weeks)
+2. **Phase 2**: User management & auth (1-2 weeks)
+3. **Phase 3**: Payment integration (1-2 weeks)
+4. **Phase 4**: Polish & testing (1-2 weeks)
+
+---
+
+## Output Template for Claude Code
+
+After completing the above framework, create this structured brief for Claude:
+
+\`\`\`markdown
+# Project Brief: [Your App Name]
+
+## Executive Summary
+[2-3 sentences describing what you're building and why]
+
+## Problem & Solution
+- **Problem**: [Clear problem statement]
+- **Solution**: [How your app solves it]
+- **Target Users**: [Who will use this]
+
+## Core Features (MVP)
+1. **[Feature 1]**
+   - Description: [What it does]
+   - User Flow: [Step-by-step process]
+   - Success Criteria: [How we know it works]
+
+2. **[Feature 2]**
+   - Description: [What it does]
+   - User Flow: [Step-by-step process]
+   - Success Criteria: [How we know it works]
+
+## Technical Requirements
+- **Database Schema**:
+  - Users table: [fields]
+  - [Other tables]: [fields]
+- **Authentication**: [Requirements]
+- **Integrations**: [List external services]
+- **Performance**: [Key requirements]
+
+## Design Guidelines
+- **Style**: [Design direction]
+- **Key Pages**: [List with descriptions]
+- **Mobile**: [Responsive requirements]
+
+## Business Logic
+- **User Roles**: [Define each role]
+- **Permissions**: [Who can do what]
+- **Pricing**: [If applicable]
+
+## Success Metrics
+- [Metric 1]: [Target]
+- [Metric 2]: [Target]
+
+## Development Priorities
+1. [Most important feature/functionality]
+2. [Second priority]
+3. [Third priority]
+
+## Constraints & Considerations
+- [Any specific limitations]
+- [Important business rules]
+- [Compliance requirements]
+\`\`\`
+
+---
+
+## Best Practices for Working with Claude Code
+
+### 1. Start Small
+- Begin with the simplest version of your core feature
+- Test and validate before adding complexity
+- Iterate based on what you learn
+
+### 2. Be Specific
+- Use concrete examples instead of abstract descriptions
+- Provide sample data when possible
+- Include edge cases and error scenarios
+
+### 3. Think in User Stories
+- "As a [user type], I want to [action] so that [benefit]"
+- This helps Claude understand context and purpose
+
+### 4. Provide Visual References
+- Sketch simple wireframes
+- Share examples of similar apps you like
+- Describe the visual hierarchy
+
+### 5. Define Success Clearly
+- What does "working" mean for each feature?
+- How will you test if it's successful?
+- What are the acceptance criteria?
+
+### 6. Communicate Constraints
+- Budget limitations
+- Timeline requirements
+- Technical preferences
+- Scaling expectations
+
+---
+
+## Common Pitfalls to Avoid
+
+1. **Feature Creep**: Trying to build everything at once
+2. **Vague Requirements**: "Make it user-friendly" without specifics
+3. **Ignoring User Feedback**: Building in isolation
+4. **Over-Engineering**: Complex solutions for simple problems
+5. **Under-Specifying**: Not enough detail for Claude to execute
+
+---
+
+## Next Steps
+
+1. **Complete this framework** for your specific app idea
+2. **Create the output brief** using the template
+3. **Review and refine** — sleep on it and revisit
+4. **Start with Claude Code** on the simplest feature first
+5. **Iterate and improve** based on results
+
+Remember: The clearer your vision and requirements, the better Claude Code can help you build it. Take time in the planning phase to save time in development.
+`;
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'saas-scoping-framework.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>
