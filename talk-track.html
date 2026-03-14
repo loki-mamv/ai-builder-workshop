@@ -1,0 +1,201 @@
+<html><body style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; color: #222;">
+
+<h1 style="text-align:center; color: #0B6DEE;">Up-Skill.md: A Non-Engineer's Guide to Shipping Real Products</h1>
+<p style="text-align:center; color: #666; font-size: 14px;">Talk Track &amp; Speaker Notes — 1 Hour Presentation + Q&amp;A<br>March 18, 2026 · 12:00 PM ET</p>
+
+<hr style="border: 1px solid #ddd; margin: 30px 0;">
+
+<h2 style="color: #333;">🎯 OVERVIEW &amp; PACING</h2>
+<table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse; font-size: 14px;">
+<tr style="background: #f0f0f0;"><th>Section</th><th>Time</th><th>Slides</th><th>Notes</th></tr>
+<tr><td><b>Opening &amp; Three Themes</b></td><td>5 min</td><td>1-3</td><td>Hook them, set expectations</td></tr>
+<tr><td><b>Theme 1: Tinker Relentlessly</b> — What you can build</td><td>15 min</td><td>4-10</td><td>Show real examples, landscape overview</td></tr>
+<tr><td><b>Theme 2: Front-Load the Thinking</b> — The spec &amp; process</td><td>20 min</td><td>11-22</td><td>LIVE DEMO — walk through building something</td></tr>
+<tr><td><b>Theme 3: You Can Build This</b> — Tools &amp; getting started</td><td>15 min</td><td>23-34</td><td>Power features, pricing, how to start today</td></tr>
+<tr><td><b>Wrap-up &amp; Q&amp;A</b></td><td>5+ min</td><td>35-38</td><td>Resources, questions</td></tr>
+</table>
+
+<hr style="border: 1px solid #ddd; margin: 30px 0;">
+
+<h2 style="color: #0B6DEE;">PART 0: OPENING (5 min)</h2>
+
+<h3>Slide 1 — Title</h3>
+<p><b>Walk-in talk:</b> "Thanks for being here. I'm Mike Maseda — I run sales and operations at GenHealth, a healthcare AI company. I'm not an engineer. I've never been an engineer. But in the last year, I've shipped more software than most engineering teams I know."</p>
+<p>"This talk isn't about theory. It's about what I've actually done, the tools I used, and how you can do the same thing — starting today."</p>
+
+<h3>Slide 2 — Three Things I Want You to Leave With</h3>
+<p><b>Say:</b> "I want you to walk out of here with three things burned into your brain:"</p>
+<ol>
+<li><b>"Tinker Relentlessly."</b> — "The AI landscape changes every week. Not every month. Every week. The only way to keep up is to keep your hands dirty. Push past ChatGPT. Push past copy-pasting prompts. Actually build something."</li>
+<li><b>"Front-Load the Thinking."</b> — "The biggest mistake I see people make is jumping straight into a tool and saying 'build me an app.' The more time you spend thinking about what you want BEFORE you touch a tool, the better your result. I'll show you exactly what I mean."</li>
+<li><b>"You Can Build This."</b> — "The tools exist today. Right now. The barrier isn't technical skill. It's not money. It's the willingness to try and fail a few times. I'm going to prove that to you in the next hour."</li>
+</ol>
+<p><i>Transition: "Let me show you what I mean by that first one — tinker relentlessly."</i></p>
+
+<h3>Slide 3 — Who This Talk Is For</h3>
+<p><b>Quick scan:</b> "Quick show of hands — who here has used ChatGPT or Claude? [Most hands.] Who has used it for something beyond just asking questions — like generating a document, analyzing data, writing code? [Some hands.] Who has actually built and deployed something with AI tools? [Few hands.]"</p>
+<p>"Perfect. This talk is for all of you. If you're in that last group, you'll pick up new tools. If you're in the first group, I'm about to blow your mind."</p>
+
+<hr style="border: 1px solid #ddd; margin: 30px 0;">
+
+<h2 style="color: #5A49E1;">THEME 1: TINKER RELENTLESSLY (15 min)</h2>
+<p style="color: #666;"><i>Goal: Show what's possible. Get them excited. Remove the "I could never do that" barrier.</i></p>
+
+<h3>Slide 4 — What I've Built</h3>
+<p><b>Say:</b> "Here's what I've personally built — not outsourced, not hired a dev for — in the last 12 months:"</p>
+<ul>
+<li><b>Customer-facing web apps</b> — "Full applications with login, databases, payment processing. Live in production. Real users paying real money."</li>
+<li><b>Internal tools &amp; dashboards</b> — "Analytics dashboards, CRM integrations, automated reporting. Things that would have cost $50-100K to outsource."</li>
+<li><b>AI-powered workflows</b> — "Email automation, data processing pipelines, even voice agents."</li>
+<li><b>Content &amp; marketing sites</b> — "Landing pages, presentation decks — like this one you're looking at right now."</li>
+</ul>
+<p><i>Pause for effect:</i> "This presentation was built with AI. Not designed in PowerPoint. Built as code — by me, a sales guy."</p>
+
+<h3>Slides 5-7 — What You Can Build / Real Examples / Problems Worth Solving</h3>
+<p><b>Say:</b> "But forget about me. Here's what OTHER non-engineers are building right now:"</p>
+<ul>
+<li>"Founders shipping MVPs in a weekend instead of spending $50K on a dev shop"</li>
+<li>"Sales teams building their own CRM integrations instead of waiting 6 months for IT"</li>
+<li>"Consultants building client-facing tools that become new revenue streams"</li>
+<li>"Operations people automating reports that used to take 8 hours a week"</li>
+</ul>
+<p><b>Key line:</b> "The best problems to solve with AI tools are the ones you're uniquely positioned to see. You know your industry. You know the pain points. You just didn't have the technical skills to fix them — until now."</p>
+
+<h3>Slides 8-10 — The AI Builder Landscape / When to Use What</h3>
+<p><b>Say:</b> "Let me orient you to the landscape. There's a spectrum:"</p>
+<ul>
+<li><b>No-code (Bolt, Lovable, v0):</b> "Point and click, get a working app. Great for prototypes and simple tools. Ceiling is low but the floor is zero."</li>
+<li><b>AI-assisted coding (Cursor, Windsurf, GitHub Copilot):</b> "You're in an IDE, but AI is writing 80% of the code. Need some technical comfort."</li>
+<li><b>AI agents (Claude Code, Codex):</b> "You give it a task, it figures out the implementation. This is where I live. You need to understand what you're asking for, but you don't need to know how to code it."</li>
+</ul>
+<p><b>Key insight:</b> "Don't pick one and stick with it. I use all of them depending on the task. Quick prototype? Bolt. Complex app? Claude Code. The tool doesn't matter — the thinking does."</p>
+
+<hr style="border: 1px solid #ddd; margin: 30px 0;">
+
+<h2 style="color: #46D19A;">THEME 2: FRONT-LOAD THE THINKING (20 min)</h2>
+<p style="color: #666;"><i>Goal: This is the meat. Show the actual process with a live example. This is where they learn.</i></p>
+
+<h3>Slides 11-14 — The Modern Stack / Tool Map / How It Connects</h3>
+<p><b>Say:</b> "Before I show you the process, let me quickly map the tools. You don't need all of these — you need maybe 3."</p>
+<ul>
+<li><b>Frontend:</b> "What users see. HTML, React, whatever. AI handles this."</li>
+<li><b>Backend/Database:</b> "Where data lives. Supabase is my go-to — it's like Firebase but simpler."</li>
+<li><b>Hosting:</b> "Where it lives on the internet. GitHub Pages for static, Vercel for apps. Both free."</li>
+<li><b>AI layer:</b> "Claude, GPT, Gemini — the brains. Connected via API."</li>
+</ul>
+<p>"You don't need to memorize this. You need to know it exists. When you tell Claude Code 'I need a web app with a database,' it knows how to wire all of this together."</p>
+
+<h3>Slides 15-16 — My Process / The Spec</h3>
+<p><b>THIS IS THE KEY SLIDE. Slow down here.</b></p>
+<p><b>Say:</b> "Here's the single most important thing I'll tell you today: <b>the quality of your spec determines the quality of your output.</b>"</p>
+<p>"Most people open ChatGPT and type 'build me a CRM.' That's like walking into a contractor's office and saying 'build me a house.' What kind of house? How many rooms? What style? Where?"</p>
+<p>"The spec conversation is where you do your real work. Here's what a good spec includes:"</p>
+<ol>
+<li><b>What problem does this solve?</b> — "Not 'what do I want to build' but 'what pain am I eliminating?'"</li>
+<li><b>Who uses it?</b> — "Be specific. 'Sales reps who need to log calls in under 30 seconds.'"</li>
+<li><b>What does success look like?</b> — "User can do X in Y clicks/seconds."</li>
+<li><b>What's the MVP?</b> — "What's the smallest version that's still useful? Build that first."</li>
+<li><b>What does it look like?</b> — "Show examples. Screenshot a competitor. Sketch on a napkin."</li>
+</ol>
+
+<h3>Slides 17-18 — The Conversation / A Real Example</h3>
+<p><b>🔴 LIVE DEMO TIME</b></p>
+<p><b>Say:</b> "Let me show you what this actually looks like. I'm going to build something right now, live, in front of you."</p>
+<p><b>Demo options (pick one based on audience):</b></p>
+<ul>
+<li><b>Option A: Simple tool</b> — "Let's build a meeting cost calculator. You put in number of people, their hourly rates, meeting duration — it tells you how much that meeting just cost your company."</li>
+<li><b>Option B: Something from the audience</b> — "Actually, let me ask — does anyone here have a simple tool they wish existed? Something that would save you 30 minutes a day?" [Take a suggestion, build it live.]</li>
+<li><b>Option C: GenHealth-relevant</b> — "Let me build a prior authorization status tracker. A simple dashboard where you can see where every PA stands."</li>
+</ul>
+<p><b>Walk through the conversation with Claude Code:</b></p>
+<ol>
+<li>Start with the spec — type it out conversationally</li>
+<li>Show Claude Code generating the first version</li>
+<li>Open it in the browser — "Look, it works. 3 minutes."</li>
+<li>Iterate: "Actually, let's add a dark mode. Let's make the chart interactive."</li>
+<li>Show the refinement loop — 2-3 iterations max</li>
+</ol>
+<p><b>Key line while demo runs:</b> "Notice I'm not writing code. I'm having a conversation. I'm describing what I want in plain English. The AI writes the code. I judge the output. That's the workflow."</p>
+
+<h3>Slides 19-20 — First Build &amp; Refinement</h3>
+<p><b>Say:</b> "What you just saw is the real loop: Spec → Build → Look at it → Refine → Repeat."</p>
+<p>"The first build gets you 80-90% there. The iteration is where you polish. And here's the thing most people don't realize: <b>each iteration takes minutes, not days.</b>"</p>
+
+<h3>Slides 21-22 — Common Pitfalls &amp; Best Practices</h3>
+<p><b>Pitfalls to call out:</b></p>
+<ul>
+<li>"Vague specs get vague results. 'Make it better' is not feedback. 'Make the header larger and change the green to blue' is."</li>
+<li>"Don't try to build everything at once. Ship the MVP. Then add features."</li>
+<li>"Don't trust AI blindly. Review the output. Test it. AI makes confident-sounding mistakes."</li>
+<li>"Don't skip the security basics — especially if you're handling user data." [Point to appendix slides]</li>
+</ul>
+
+<hr style="border: 1px solid #ddd; margin: 30px 0;">
+
+<h2 style="color: #0B6DEE;">THEME 3: YOU CAN BUILD THIS (15 min)</h2>
+<p style="color: #666;"><i>Goal: Give them the concrete tools and confidence to start today.</i></p>
+
+<h3>Slides 23-29 — Claude Code Power Features (MCP, CLIs, CLAUDE.md, etc.)</h3>
+<p><b>Say:</b> "I'm going to go a little deeper on Claude Code specifically because it's what I use every day. You don't need to memorize any of this — the slides will be shared."</p>
+<p><b>Hit the highlights fast:</b></p>
+<ul>
+<li><b>MCP (Model Context Protocol):</b> "Think of it as plugins for AI. Connect Claude to your database, your CRM, your Slack — it can read and write to any of them."</li>
+<li><b>CLIs:</b> "Claude Code runs in the terminal. Why? Because that's where all the power tools live. Git, databases, file systems — Claude can use all of them directly."</li>
+<li><b>CLAUDE.md:</b> "This is like an instruction manual for your AI. You put it in your project and Claude reads it every time. 'Always use Supabase. Always add tests. Use this color palette.' It remembers your preferences."</li>
+<li><b>Multi-session:</b> "Run multiple Claude instances on different tasks simultaneously. While one is building your frontend, another is setting up your database."</li>
+</ul>
+
+<h3>Slide 30 — Pricing</h3>
+<p><b>Say:</b> "Let's talk money. Claude Max is $100-200/month depending on the tier. That sounds like a lot until you realize a junior developer costs $6-8K/month. A freelancer costs $100-150/hour. I'm building production apps for the cost of a nice dinner."</p>
+<p>"And there are free tiers for most tools. You can start with $0 today."</p>
+
+<h3>Slide 31 — OpenClaw</h3>
+<p><b>Say:</b> "Quick personal plug — I use something called OpenClaw that turns Claude Code into a 24/7 assistant. It monitors my messages, checks my calendar, manages tasks, even does research while I sleep. It's open source. If that sounds interesting, come talk to me after."</p>
+<p><i>[Don't spend more than 60 seconds on this — it's a rabbit hole.]</i></p>
+
+<h3>Slides 32-34 — Getting Started / Productivity Tools / Resources</h3>
+<p><b>Say:</b> "Here's your homework. Tonight. Not next week. Tonight:"</p>
+<ol>
+<li>"Sign up for Claude.ai if you haven't. Free tier is fine to start."</li>
+<li>"Think of one problem you deal with every week that a simple tool could solve."</li>
+<li>"Write a spec. Just in plain English. What does it do? Who uses it? What does it look like?"</li>
+<li>"Open Claude and paste your spec. See what happens."</li>
+</ol>
+<p>"That's it. That's how I started. One stupid little tool that solved one annoying problem. And then I couldn't stop."</p>
+
+<hr style="border: 1px solid #ddd; margin: 30px 0;">
+
+<h2 style="color: #333;">WRAP-UP &amp; Q&amp;A (5+ min)</h2>
+
+<h3>Slide 35 — Questions</h3>
+<p><b>Closing:</b> "Let me bring it back to those three things:"</p>
+<ol>
+<li><b>"Tinker relentlessly"</b> — "The AI tools are changing weekly. Stay curious. Break things."</li>
+<li><b>"Front-load the thinking"</b> — "Your spec is your superpower. Think hard, build fast."</li>
+<li><b>"You can build this"</b> — "I'm proof. I'm a sales guy who ships software. You can too."</li>
+</ol>
+<p>"Questions?"</p>
+
+<hr style="border: 1px solid #ddd; margin: 30px 0;">
+
+<h2 style="color: #666;">📋 PREP CHECKLIST</h2>
+<ul>
+<li>☐ Test screen sharing &amp; presentation in browser (deck is HTML, not PPT)</li>
+<li>☐ Have Claude Code terminal ready for live demo</li>
+<li>☐ Pre-stage a demo spec in case audience suggestion falls flat</li>
+<li>☐ Test internet connection (need it for Claude API)</li>
+<li>☐ Have backup demo as a recording in case internet dies</li>
+<li>☐ Charge laptop, close notifications, do-not-disturb mode</li>
+<li>☐ Deck URL: https://loki-mamv.github.io/ai-builder-workshop/</li>
+</ul>
+
+<h2 style="color: #666;">🎙 ENERGY NOTES</h2>
+<ul>
+<li>Open strong. Don't start with "um, so, hi." Start with confidence.</li>
+<li>The live demo is the make-or-break moment. Practice the happy path 2-3 times.</li>
+<li>If something breaks during the demo, laugh about it: "See? This is why we iterate."</li>
+<li>Keep the power features section FAST. It's easy to nerd out — don't. Save details for Q&amp;A.</li>
+<li>End with energy. The last thing they hear should make them want to go try it immediately.</li>
+</ul>
+
+</body></html>
