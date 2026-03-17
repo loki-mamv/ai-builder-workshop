@@ -1170,6 +1170,105 @@ with date-stamped filename.</div>
   <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>22 / 38</span></div>
 </div>
 
+<!-- ===================== SLIDE: CascadeOKR — The Build ===================== -->
+<div class="slide" data-title="CascadeOKR Build">
+  <div class="slide-inner">
+    <p class="label">Case Study</p>
+    <h2>CascadeOKR — Built in One Evening</h2>
+    <p style="margin-bottom:1rem; font-size:1rem; color:var(--text-muted);">A full OKR platform for tracking company objectives, built in a single Claude Code session.</p>
+
+    <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:0.75rem; margin-bottom:1.25rem;">
+      <div class="card" style="text-align:center; padding:0.75rem 0.5rem;">
+        <div style="font-size:1.5rem; font-weight:700; color:var(--purple);">~2.5 hrs</div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">Total Time</div>
+      </div>
+      <div class="card" style="text-align:center; padding:0.75rem 0.5rem;">
+        <div style="font-size:1.5rem; font-weight:700; color:var(--blue);">11,268</div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">Lines of Code</div>
+      </div>
+      <div class="card" style="text-align:center; padding:0.75rem 0.5rem;">
+        <div style="font-size:1.5rem; font-weight:700; color:var(--green);">53</div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">Files Created</div>
+      </div>
+      <div class="card" style="text-align:center; padding:0.75rem 0.5rem;">
+        <div style="font-size:1.5rem; font-weight:700; color:#D97706;">0</div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">Lines by Human</div>
+      </div>
+      <div class="card" style="text-align:center; padding:0.75rem 0.5rem;">
+        <div style="font-size:1.5rem; font-weight:700; color:var(--purple);">24</div>
+        <div style="font-size:0.75rem; color:var(--text-muted);">Interview Qs</div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+      <div class="card" style="padding:1.25rem;">
+        <h3 style="margin-top:0; font-size:1rem;">How It Started</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">I wrote a project brief describing what I wanted — an OKR platform with cascading objectives, department health maps, and AI-generated summaries. Then I told Claude Code:</p>
+        <div style="background:rgba(90,73,225,0.06); border-radius:8px; padding:0.75rem 1rem; font-size:0.85rem; font-style:italic; border-left:3px solid var(--purple);">
+          "Read this brief and interview me about literally anything — technical, UX, tradeoffs. Make sure the questions aren't obvious."
+        </div>
+      </div>
+      <div class="card" style="padding:1.25rem;">
+        <h3 style="margin-top:0; font-size:1rem;">What Happened Next</h3>
+        <ul style="font-size:0.85rem; color:var(--text-muted); padding-left:1.25rem; margin:0; line-height:1.7;">
+          <li><strong>13 min</strong> — Claude asked 24 deep questions across 6 rounds (pacing curves, rollup logic, cascade viz, auth model)</li>
+          <li><strong>2 min</strong> — Saved all decisions, set up types + utilities</li>
+          <li><strong>24 min</strong> — Built the entire app autonomously (I said "kick off however you see fit")</li>
+          <li><strong>Remaining</strong> — Bug fixes, polish, new features on request</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span></div>
+</div>
+
+<!-- ===================== SLIDE: CascadeOKR — What It Does ===================== -->
+<div class="slide" data-title="CascadeOKR Features">
+  <div class="slide-inner">
+    <p class="label">Case Study</p>
+    <h2>CascadeOKR — What We Shipped</h2>
+    <p style="margin-bottom:1rem; font-size:1rem; color:var(--text-muted);">Every feature below was built in the same session. No templates, no boilerplate — from zero to deployed.</p>
+
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.75rem; margin-bottom:1.25rem;">
+      <div class="card" style="padding:1rem;">
+        <div style="font-size:1.25rem; margin-bottom:0.3rem;">📊</div>
+        <h3 style="font-size:0.9rem; margin:0 0 0.3rem 0;">Executive Dashboard</h3>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin:0;">Department heat map, company-wide progress, needs-attention feed with composite risk scoring</p>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div style="font-size:1.25rem; margin-bottom:0.3rem;">🌳</div>
+        <h3 style="font-size:0.9rem; margin:0 0 0.3rem 0;">OKR Cascade View</h3>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin:0;">Hybrid tree + list view. Company goals roll down to departments, then to individual KRs with milestone tracking</p>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div style="font-size:1.25rem; margin-bottom:0.3rem;">🤖</div>
+        <h3 style="font-size:0.9rem; margin:0 0 0.3rem 0;">AI Summaries (Gemini)</h3>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin:0;">Generate narrative summaries in 3 tones — Board-level, All-Hands, or Internal. PDF export built in.</p>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div style="font-size:1.25rem; margin-bottom:0.3rem;">✅</div>
+        <h3 style="font-size:0.9rem; margin:0 0 0.3rem 0;">Check-In Flow</h3>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin:0;">Biweekly check-ins with pacing curves (linear, front-loaded, back-loaded). Auto-detect for measurable KRs.</p>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div style="font-size:1.25rem; margin-bottom:0.3rem;">🔮</div>
+        <h3 style="font-size:0.9rem; margin:0 0 0.3rem 0;">AI Quarter Planning</h3>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin:0;">4-step wizard: review last quarter, set themes, AI generates OKR suggestions, edit and finalize</p>
+      </div>
+      <div class="card" style="padding:1rem;">
+        <div style="font-size:1.25rem; margin-bottom:0.3rem;">👥</div>
+        <h3 style="font-size:0.9rem; margin:0 0 0.3rem 0;">Role-Based Views</h3>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin:0;">Switch between 15 users across 8 departments. Each sees their own OKRs, notifications, and digest.</p>
+      </div>
+    </div>
+
+    <div class="card" style="padding:1rem; text-align:center; background:rgba(11,109,238,0.04); border-color:var(--blue);">
+      <p style="font-size:0.9rem; margin:0;"><strong>The takeaway:</strong> This would be a 2-4 week project for a dev team. One person with Claude Code shipped it in an evening. The full build story is at <strong>mamv.co/cascadeokr</strong></p>
+    </div>
+  </div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span></div>
+</div>
+
 <!-- ===================== SLIDE 18: Power Features Section ===================== -->
 <div class="slide" data-title="Power Features">
   <div class="slide-inner" style="text-align:center; align-items:center;">
@@ -1177,7 +1276,7 @@ with date-stamped filename.</div>
     <h1 style="font-size:2.5rem;">Claude Code Power Features</h1>
     <p class="subtitle" style="max-width:600px;">The features that make builders fall in love with it</p>
   </div>
-  <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>23 / 38</span></div>
+  <div class="slide-footer"><span class="wordmark">Mike Maseda</span></div>
 </div>
 
 <!-- ===================== SLIDE 19: MCP Deep Dive ===================== -->
