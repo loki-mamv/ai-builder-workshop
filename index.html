@@ -740,120 +740,84 @@ p, li { font-size: 1.15rem; line-height: 1.6; color: var(--text-sec); }
   <div class="slide-inner">
     <p class="label">Architecture</p>
     <h2>How It All Connects</h2>
-    <p style="margin-bottom:0.75rem; font-size:1rem; color:var(--text-muted);">Here's how the pieces fit together when you're building a real app:</p>
+    <p style="margin-bottom:1.25rem; font-size:1rem; color:var(--text-muted);">Here's how the pieces fit together when you're building a real app:</p>
 
-    <!-- Visual flow diagram with SVG connectors -->
-    <div style="position:relative; max-width:880px; margin:0 auto;" id="arch-diagram">
-      <!-- SVG connector layer -->
-      <svg style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0;" id="arch-svg">
-        <defs>
-          <marker id="arrow-purple" viewBox="0 0 10 6" refX="10" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-auto"><path d="M0,0 L10,3 L0,6" fill="#5A49E1"/></marker>
-          <marker id="arrow-blue" viewBox="0 0 10 6" refX="10" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-auto"><path d="M0,0 L10,3 L0,6" fill="#0B6DEE"/></marker>
-          <marker id="arrow-green" viewBox="0 0 10 6" refX="10" refY="3" markerWidth="8" markerHeight="5" orient="auto-start-auto"><path d="M0,0 L10,3 L0,6" fill="#46D19A"/></marker>
-        </defs>
-      </svg>
+    <!-- Clean left-to-right flow diagram — pure CSS, no SVG -->
+    <div style="display:flex; align-items:center; justify-content:center; gap:0; max-width:960px; margin:0 auto; flex-wrap:nowrap;">
 
-      <!-- Row 1: You → Claude Code → GitHub -->
-      <div style="display:flex; justify-content:center; align-items:stretch; gap:3rem; margin-bottom:1.25rem; position:relative; z-index:1;">
-        <div class="card" id="box-you" style="text-align:center; padding:0.9rem 1.5rem; background:rgba(90,73,225,0.06); border-color:var(--purple); flex:0 0 170px;">
-          <div style="font-size:1.5rem; margin-bottom:0.25rem;">🧑‍💻</div>
-          <h3 style="color:var(--purple); font-size:1rem; margin:0;">You</h3>
-          <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.2rem;">Describe what you want</p>
+      <!-- You -->
+      <div class="card" style="text-align:center; padding:0.75rem 1rem; background:rgba(90,73,225,0.06); border-color:var(--purple); flex:0 0 auto; min-width:120px;">
+        <div style="font-size:1.3rem; margin-bottom:0.2rem;">🧑‍💻</div>
+        <h3 style="color:var(--purple); font-size:0.9rem; margin:0;">You</h3>
+        <p style="font-size:0.72rem; color:var(--text-muted); margin-top:0.15rem;">Describe what<br>you want</p>
+      </div>
+
+      <!-- Arrow -->
+      <div style="display:flex; flex-direction:column; align-items:center; padding:0 0.35rem; flex-shrink:0;">
+        <div style="width:36px; height:2px; background:#5A49E1;"></div>
+        <div style="width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #5A49E1; margin-top:-6px; margin-left:36px;"></div>
+      </div>
+
+      <!-- Claude Code -->
+      <div class="card" style="text-align:center; padding:0.75rem 1rem; background:rgba(217,119,6,0.06); border-color:#D97706; flex:0 0 auto; min-width:120px;">
+        <div style="font-size:1.3rem; margin-bottom:0.2rem;">🤖</div>
+        <h3 style="color:#D97706; font-size:0.9rem; margin:0;">Claude Code</h3>
+        <p style="font-size:0.72rem; color:var(--text-muted); margin-top:0.15rem;">Writes &amp;<br>runs code</p>
+      </div>
+
+      <!-- Arrow: pushes code -->
+      <div style="display:flex; flex-direction:column; align-items:center; padding:0 0.35rem; flex-shrink:0;">
+        <span style="font-size:0.65rem; font-weight:600; color:#0B6DEE; margin-bottom:2px;">pushes code</span>
+        <div style="width:36px; height:2px; background:#0B6DEE;"></div>
+        <div style="width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #0B6DEE; margin-top:-6px; margin-left:36px;"></div>
+      </div>
+
+      <!-- GitHub -->
+      <div class="card" style="text-align:center; padding:0.75rem 1rem; flex:0 0 auto; min-width:120px;">
+        <div style="font-size:1.3rem; margin-bottom:0.2rem;">🐙</div>
+        <h3 style="font-size:0.9rem; margin:0;">GitHub</h3>
+        <p style="font-size:0.72rem; color:var(--text-muted); margin-top:0.15rem;">Saves every<br>version</p>
+      </div>
+
+      <!-- Arrow: auto-deploys -->
+      <div style="display:flex; flex-direction:column; align-items:center; padding:0 0.35rem; flex-shrink:0;">
+        <span style="font-size:0.65rem; font-weight:600; color:#0B6DEE; margin-bottom:2px;">auto-deploys</span>
+        <div style="width:36px; height:2px; background:#0B6DEE;"></div>
+        <div style="width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #0B6DEE; margin-top:-6px; margin-left:36px;"></div>
+      </div>
+
+      <!-- Vercel + Supabase stacked -->
+      <div style="display:flex; flex-direction:column; gap:0.5rem; flex:0 0 auto;">
+        <div class="card" style="text-align:center; padding:0.6rem 1rem; background:rgba(11,109,238,0.04); border-color:var(--blue); min-width:120px;">
+          <div style="font-size:1.1rem; margin-bottom:0.15rem;">▲</div>
+          <h3 style="color:var(--blue); font-size:0.9rem; margin:0;">Vercel</h3>
+          <p style="font-size:0.72rem; color:var(--text-muted); margin-top:0.1rem;">Hosts your app</p>
         </div>
-        <div class="card" id="box-claude" style="text-align:center; padding:0.9rem 1.5rem; background:rgba(217,119,6,0.06); border-color:#D97706; flex:0 0 170px;">
-          <div style="font-size:1.5rem; margin-bottom:0.25rem;">🤖</div>
-          <h3 style="color:#D97706; font-size:1rem; margin:0;">Claude Code</h3>
-          <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.2rem;">Writes & runs code</p>
-        </div>
-        <div class="card" id="box-github" style="text-align:center; padding:0.9rem 1.5rem; flex:0 0 170px;">
-          <div style="font-size:1.5rem; margin-bottom:0.25rem;">🐙</div>
-          <h3 style="font-size:1rem; margin:0;">GitHub</h3>
-          <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.2rem;">Saves every version</p>
+        <div class="card" style="text-align:center; padding:0.6rem 1rem; background:rgba(70,209,154,0.06); border-color:var(--green); min-width:120px;">
+          <div style="font-size:1.1rem; margin-bottom:0.15rem;">⚡</div>
+          <h3 style="color:var(--green); font-size:0.9rem; margin:0;">Supabase</h3>
+          <p style="font-size:0.72rem; color:var(--text-muted); margin-top:0.1rem;">Database &amp; login</p>
         </div>
       </div>
 
-      <!-- Row 2: Vercel ↔ Supabase -->
-      <div style="display:flex; justify-content:center; align-items:stretch; gap:3rem; margin-bottom:1.25rem; position:relative; z-index:1;">
-        <div class="card" id="box-vercel" style="text-align:center; padding:0.9rem 1.5rem; background:rgba(11,109,238,0.04); border-color:var(--blue); flex:0 0 170px;">
-          <div style="font-size:1.5rem; margin-bottom:0.25rem;">▲</div>
-          <h3 style="color:var(--blue); font-size:1rem; margin:0;">Vercel</h3>
-          <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.2rem;">Hosts your app</p>
-        </div>
-        <div class="card" id="box-supabase" style="text-align:center; padding:0.9rem 1.5rem; background:rgba(70,209,154,0.06); border-color:var(--green); flex:0 0 170px;">
-          <div style="font-size:1.5rem; margin-bottom:0.25rem;">⚡</div>
-          <h3 style="color:var(--green); font-size:1rem; margin:0;">Supabase</h3>
-          <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.2rem;">Database & login</p>
-        </div>
+      <!-- Arrow -->
+      <div style="display:flex; flex-direction:column; align-items:center; padding:0 0.35rem; flex-shrink:0;">
+        <div style="width:36px; height:2px; background:#46D19A;"></div>
+        <div style="width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid #46D19A; margin-top:-6px; margin-left:36px;"></div>
       </div>
 
-      <!-- Row 3: Users -->
-      <div style="display:flex; justify-content:center; position:relative; z-index:1;">
-        <div class="card" id="box-users" style="text-align:center; padding:0.9rem 2rem; background:rgba(70,209,154,0.04); border-color:var(--green); flex:0 0 200px;">
-          <div style="font-size:1.5rem; margin-bottom:0.25rem;">👥</div>
-          <h3 style="font-size:1rem; margin:0;">Your Users</h3>
-          <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.2rem;">Visit & use your app</p>
-        </div>
+      <!-- Users -->
+      <div class="card" style="text-align:center; padding:0.75rem 1rem; background:rgba(70,209,154,0.04); border-color:var(--green); flex:0 0 auto; min-width:120px;">
+        <div style="font-size:1.3rem; margin-bottom:0.2rem;">👥</div>
+        <h3 style="font-size:0.9rem; margin:0;">Your Users</h3>
+        <p style="font-size:0.72rem; color:var(--text-muted); margin-top:0.15rem;">Visit &amp; use<br>your app</p>
       </div>
 
-      <!-- Connector labels -->
-      <div id="conn-labels" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></div>
     </div>
 
-    <div class="card" style="margin-top:0.75rem; text-align:center; background:rgba(11,109,238,0.04); border-color:var(--blue); padding:0.6rem 1.5rem;">
+    <div class="card" style="margin-top:1rem; text-align:center; background:rgba(11,109,238,0.04); border-color:var(--blue); padding:0.6rem 1.5rem; max-width:960px; margin-left:auto; margin-right:auto;">
       <p style="font-size:0.9rem; margin:0;"><strong>The flow:</strong> You talk to Claude Code → it pushes to GitHub → Vercel auto-deploys → your app is live.</p>
     </div>
-
-    <script>
-    // Draw SVG connectors between architecture boxes
-    (function drawArch() {
-      function pos(id) {
-        const el = document.getElementById(id);
-        const p = document.getElementById('arch-diagram');
-        const er = el.getBoundingClientRect(), pr = p.getBoundingClientRect();
-        return {
-          cx: er.left - pr.left + er.width/2,
-          cy: er.top - pr.top + er.height/2,
-          t: er.top - pr.top, b: er.top - pr.top + er.height,
-          l: er.left - pr.left, r: er.left - pr.left + er.width
-        };
-      }
-      function line(svg, x1,y1,x2,y2,color,marker) {
-        const l = document.createElementNS('http://www.w3.org/2000/svg','line');
-        l.setAttribute('x1',x1); l.setAttribute('y1',y1);
-        l.setAttribute('x2',x2); l.setAttribute('y2',y2);
-        l.setAttribute('stroke',color); l.setAttribute('stroke-width','2.5');
-        if(marker) l.setAttribute('marker-end','url(#'+marker+')');
-        svg.appendChild(l);
-      }
-      function label(container, x, y, text, color) {
-        const d = document.createElement('div');
-        d.style.cssText = 'position:absolute;font-size:0.7rem;font-weight:600;color:'+color+';white-space:nowrap;transform:translate(-50%,-50%);';
-        d.style.left = x+'px'; d.style.top = y+'px';
-        d.textContent = text;
-        container.appendChild(d);
-      }
-      setTimeout(function() {
-        const svg = document.getElementById('arch-svg');
-        const labels = document.getElementById('conn-labels');
-        const you = pos('box-you'), cc = pos('box-claude'), gh = pos('box-github');
-        const ve = pos('box-vercel'), sb = pos('box-supabase'), us = pos('box-users');
-        // You → Claude Code
-        line(svg, you.r+4, you.cy, cc.l-4, cc.cy, '#5A49E1', 'arrow-purple');
-        // Claude Code → GitHub
-        line(svg, cc.r+4, cc.cy, gh.l-4, gh.cy, '#0B6DEE', 'arrow-blue');
-        label(labels, (cc.r + gh.l)/2, cc.cy - 10, 'pushes code', '#0B6DEE');
-        // GitHub → Vercel (down-left)
-        line(svg, gh.cx - 30, gh.b+4, ve.cx, ve.t-4, '#0B6DEE', 'arrow-blue');
-        label(labels, (gh.cx - 30 + ve.cx)/2 + 20, (gh.b + ve.t)/2, 'auto-deploys', '#0B6DEE');
-        // Vercel ↔ Supabase
-        line(svg, ve.r+4, ve.cy, sb.l-4, sb.cy, '#6C757D', '');
-        label(labels, (ve.r + sb.l)/2, ve.cy - 10, 'talks to', '#6C757D');
-        // Vercel → Users
-        const midX = (ve.cx + sb.cx) / 2;
-        line(svg, midX, Math.max(ve.b, sb.b)+4, us.cx, us.t-4, '#46D19A', 'arrow-green');
-      }, 300);
-    })();
-    </script>
   </div>
   <div class="slide-footer"><span class="wordmark">Mike Maseda</span><span>14 / 38</span></div>
 </div>
