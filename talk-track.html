@@ -10,9 +10,9 @@
 <tr style="background: #f0f0f0;"><th>Section</th><th>Time</th><th>Slides</th><th>Notes</th></tr>
 <tr><td><b>Opening &amp; Three Themes</b></td><td>5 min</td><td>1-3</td><td>Hook them, set expectations</td></tr>
 <tr><td><b>Theme 1: Tinker Relentlessly</b> — What you can build</td><td>15 min</td><td>4-10</td><td>Show real examples, landscape overview</td></tr>
-<tr><td><b>Theme 2: Front-Load the Thinking</b> — The spec &amp; process</td><td>20 min</td><td>11-22</td><td>LIVE DEMO — walk through building something</td></tr>
-<tr><td><b>Theme 3: You Can Build This</b> — Tools &amp; getting started</td><td>15 min</td><td>23-34</td><td>Power features, pricing, how to start today</td></tr>
-<tr><td><b>Wrap-up &amp; Q&amp;A</b></td><td>5+ min</td><td>35-38</td><td>Resources, questions</td></tr>
+<tr><td><b>Theme 2: Front-Load the Thinking</b> — The spec &amp; process</td><td>20 min</td><td>11-23</td><td>LIVE DEMO — walk through building something</td></tr>
+<tr><td><b>Theme 3: You Can Build This</b> — Tools &amp; getting started</td><td>15 min</td><td>24-37</td><td>Power features, skills, pricing, how to start today</td></tr>
+<tr><td><b>Wrap-up &amp; Q&amp;A</b></td><td>5+ min</td><td>38-43</td><td>Resources, tools, questions</td></tr>
 </table>
 
 <hr style="border: 1px solid #ddd; margin: 30px 0;">
@@ -98,7 +98,27 @@
 <li><b>What does it look like?</b> — "Show examples. Screenshot a competitor. Sketch on a napkin."</li>
 </ol>
 
-<h3>Slides 17-18 — The Conversation / A Real Example</h3>
+<h3>Slide 17 — My Process (4 Steps)</h3>
+<p><b>Say:</b> "My process is dead simple. Four steps, every time:"</p>
+<ol>
+<li><b>Conversation with Claude</b> — "Describe your idea in plain English. Claude helps you turn it into a spec."</li>
+<li><b>Feed Spec to Claude Code</b> — "Give it the spec. It asks clarifying questions — then starts building."</li>
+<li><b>Let It Build</b> — "It writes code, creates files, installs dependencies. 80-90% right on the first try."</li>
+<li><b>Refinement</b> — "Iterate in plain English. 'Keep the nav visible on scroll.' 'Add dark mode.' Repeat until done."</li>
+</ol>
+
+<h3>Slide 18 — ⭐ It Asks YOU Questions (NEW)</h3>
+<p><b>THIS IS A KEY MOMENT. Pause here.</b></p>
+<p><b>Say:</b> "Before I go to the demo — I want to show you something that surprises everyone. When you give Claude Code a task, it doesn't just start blindly coding. It asks you questions first."</p>
+<p>[Point to the two screenshots on screen]</p>
+<ul>
+<li><b>Left — Claude Desktop:</b> "Here I said 'build me a patient intake form for a DME company.' Look what it came back with — 'What fields? Do you need real-time insurance verification? Which EHR system? PDF generation?' It's acting like a smart developer who actually thinks before coding."</li>
+<li><b>Right — Terminal (Claude Code):</b> "Same thing in the terminal. 'What database? What auth method? What framework? Start from scratch or add to existing?' These are the exact questions a $200/hour consultant would ask."</li>
+</ul>
+<p><b>Key line:</b> "Here's the magic — <b>you don't need to know the technical answers.</b> Claude explains the tradeoffs and recommends an approach. You just make decisions. That's the job now. You're the decision-maker, not the implementer."</p>
+<p><i>Transition: "Let me show you this live."</i></p>
+
+<h3>Slides 19-20 — The Spec Conversation / A Real Example</h3>
 <p><b>🔴 LIVE DEMO TIME</b></p>
 <p><b>Say:</b> "Let me show you what this actually looks like. I'm going to build something right now, live, in front of you."</p>
 <p><b>Demo options (pick one based on audience):</b></p>
@@ -117,11 +137,11 @@
 </ol>
 <p><b>Key line while demo runs:</b> "Notice I'm not writing code. I'm having a conversation. I'm describing what I want in plain English. The AI writes the code. I judge the output. That's the workflow."</p>
 
-<h3>Slides 19-20 — First Build &amp; Refinement</h3>
+<h3>Slides 21-22 — First Build &amp; Refinement</h3>
 <p><b>Say:</b> "What you just saw is the real loop: Spec → Build → Look at it → Refine → Repeat."</p>
 <p>"The first build gets you 80-90% there. The iteration is where you polish. And here's the thing most people don't realize: <b>each iteration takes minutes, not days.</b>"</p>
 
-<h3>Slides 21-22 — Common Pitfalls &amp; Best Practices</h3>
+<h3>Slides 23 — Common Pitfalls &amp; Best Practices</h3>
 <p><b>Pitfalls to call out:</b></p>
 <ul>
 <li>"Vague specs get vague results. 'Make it better' is not feedback. 'Make the header larger and change the green to blue' is."</li>
@@ -135,25 +155,46 @@
 <h2 style="color: #0B6DEE;">THEME 3: YOU CAN BUILD THIS (15 min)</h2>
 <p style="color: #666;"><i>Goal: Give them the concrete tools and confidence to start today.</i></p>
 
-<h3>Slides 23-29 — Claude Code Power Features (MCP, CLIs, CLAUDE.md, etc.)</h3>
+<h3>Slides 24-30 — Claude Code Power Features (MCP, CLIs, CLAUDE.md, Skills, etc.)</h3>
 <p><b>Say:</b> "I'm going to go a little deeper on Claude Code specifically because it's what I use every day. You don't need to memorize any of this — the slides will be shared."</p>
 <p><b>Hit the highlights fast:</b></p>
 <ul>
 <li><b>MCP (Model Context Protocol):</b> "Think of it as plugins for AI. Connect Claude to your database, your CRM, your Slack — it can read and write to any of them."</li>
 <li><b>CLIs:</b> "Claude Code runs in the terminal. Why? Because that's where all the power tools live. Git, databases, file systems — Claude can use all of them directly."</li>
 <li><b>CLAUDE.md:</b> "This is like an instruction manual for your AI. You put it in your project and Claude reads it every time. 'Always use Supabase. Always add tests. Use this color palette.' It remembers your preferences."</li>
+</ul>
+
+<h3>Slide 30 — ⭐ Claude Skills (NEW)</h3>
+<p><b>Say:</b> "Now here's where it gets really powerful — Skills. Think of skills as superpowers you bolt onto Claude."</p>
+<ul>
+<li>"Each skill is a SKILL.md file — packaged instructions for a specific task. GitHub management, web scraping, email, building presentations, research — each one teaches Claude exactly how to do that job."</li>
+<li>"Without skills, Claude is a generalist. Smart, but generic. WITH skills, it becomes a specialist — following your exact workflows, using your preferred tools, matching your style."</li>
+<li>"There's a community marketplace called ClawHub where people share skills. Or you write your own. My AI assistant Loki has 25+ custom skills — that's what lets it do things like manage my calendar, check Slack, send emails, and build slide decks while I sleep."</li>
+</ul>
+<p><b>Key line:</b> "Skills are what turn a chatbot into an actual team member."</p>
+
+<h3>Slide 31 — Multi-Session Workflows</h3>
+<ul>
 <li><b>Multi-session:</b> "Run multiple Claude instances on different tasks simultaneously. While one is building your frontend, another is setting up your database."</li>
 </ul>
 
-<h3>Slide 30 — Pricing</h3>
+<h3>Slide 33 — Pricing</h3>
 <p><b>Say:</b> "Let's talk money. Claude Max is $100-200/month depending on the tier. That sounds like a lot until you realize a junior developer costs $6-8K/month. A freelancer costs $100-150/hour. I'm building production apps for the cost of a nice dinner."</p>
 <p>"And there are free tiers for most tools. You can start with $0 today."</p>
 
-<h3>Slide 31 — OpenClaw</h3>
+<h3>Slide 34 — OpenClaw</h3>
 <p><b>Say:</b> "Quick personal plug — I use something called OpenClaw that turns Claude Code into a 24/7 assistant. It monitors my messages, checks my calendar, manages tasks, even does research while I sleep. It's open source. If that sounds interesting, come talk to me after."</p>
 <p><i>[Don't spend more than 60 seconds on this — it's a rabbit hole.]</i></p>
 
-<h3>Slides 32-34 — Getting Started / Productivity Tools / Resources</h3>
+<h3>Slides 35-38 — Getting Started / Productivity Tools / Resources</h3>
+<p><b>Productivity tools to highlight:</b></p>
+<ul>
+<li><b>Wispr Flow:</b> "Voice-to-text everywhere. Dictate to Claude Code instead of typing."</li>
+<li><b>Granola:</b> "AI meeting notes. Records calls, generates structured summaries — perfect for capturing specs."</li>
+<li><b>Cursor:</b> "AI-native code editor. The visual alternative to Claude Code if you like seeing the files."</li>
+<li><b>Cmux:</b> "This is one of my favorites. It lets you run multiple Claude Code sessions side-by-side in split terminal panes. One agent building your frontend, another setting up your API, another writing tests — all simultaneously. Like having a whole dev team in one terminal. Check out cmux.com."</li>
+</ul>
+
 <p><b>Say:</b> "Here's your homework. Tonight. Not next week. Tonight:"</p>
 <ol>
 <li>"Sign up for Claude.ai if you haven't. Free tier is fine to start."</li>
@@ -167,7 +208,7 @@
 
 <h2 style="color: #333;">WRAP-UP &amp; Q&amp;A (5+ min)</h2>
 
-<h3>Slide 35 — Questions</h3>
+<h3>Slide 43 — Questions</h3>
 <p><b>Closing:</b> "Let me bring it back to those three things:"</p>
 <ol>
 <li><b>"Tinker relentlessly"</b> — "The AI tools are changing weekly. Stay curious. Break things."</li>
